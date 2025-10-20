@@ -1,0 +1,69 @@
+header {
+    width: 100%;
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 0.3rem 0; /* Menos altura */
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.navbar {
+    background-color: transparent;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 50px; /* Altura mínima más compacta */
+}
+
+.navbar-brand .logo-empresa {
+    height: 30px;  
+    width: auto;
+}
+
+.navbar-nav .nav-link {
+    color: #343a40;
+    font-weight: 500;
+    margin-left: 1rem; 
+    padding-top: 6px;
+    padding-bottom: 2px;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #1d3557;
+    text-decoration: none;
+}
+
+.user-info {
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.foto-usuario {
+    height: 30px;  /* Más pequeño */
+    width: 30px;
+    object-fit: cover;
+    border: 1.5px solid #dee2e6;
+}
+
+.nombre-usuario {
+    font-size: 0.85rem;  /* Más compacto */
+    color: #343a40;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.navbar-toggler {
+    border: none;
+    background-color: transparent;
+    padding: 4px;
+}
+
+.navbar-toggler-icon {
+    filter: invert(35%);
+    width: 20px;
+    height: 20px;
+}
+
+

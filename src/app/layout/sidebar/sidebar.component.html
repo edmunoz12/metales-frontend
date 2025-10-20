@@ -1,0 +1,29 @@
+<div class="sidebar" [class.hidden]="!isSidebarVisible">
+    <button class="btn-toggle" (click)="toggleSidebar()">☰</button>  
+
+    <ul class="list-group">
+        <li class="list-group-item" *ngFor="let menu of combinedMenuItems">
+            <!-- Menu principal -->  
+            <!-- <button (click)="toggleCollapse(menu.MenuID)" [attr.aria-expanded]="!collapsedState[menu.MenuID]"> -->
+            <button class="btn-menu" (click)="toggleCollapse(menu.id)">
+                <a class="menu-link" [routerLink]="menu.menu">
+                    {{ menu.Menu }} &nbsp; &nbsp; <i class="{{menu.icono}}"></i>
+                </a>
+                
+            </button>
+
+            <!-- Submenú -->
+            <ul class="list-group" [ngClass]="{'collapse': collapsedState[menu.id]}">
+                <li class="list-group-item" *ngFor="let sub of menu.Submenu">
+                    <button class="btn-submenu">
+                        <!--<a class="submenu-link" [routerLink]="sub.Link">{{ sub.Link }}</a>-->
+                        <a class="submenu-link" [routerLink]="sub.Link">{{ sub.Nombre }} <i class="{{sub.icono}}"></i> </a> 
+                        
+                    </button>
+                </li>
+            </ul>
+        </li>
+    </ul> 
+    
+</div>
+ 
