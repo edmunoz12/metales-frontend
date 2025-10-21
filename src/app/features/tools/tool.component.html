@@ -1,15 +1,14 @@
 <div class="container mt-4">
 
-  <h1>CATÁLOGO DE HERRAMIENTAS</h1>
+  <h1 class="mb-4">CATÁLOGO DE HERRAMIENTAS</h1>
 
   <!-- Encabezado con búsqueda y botón nuevo -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    
-    <input type="text" class="form-control w-50" [(ngModel)]="search" (input)="onSearch(search)"
-      placeholder="Buscar herramientas...">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <input type="text" class="form-control w-50" [(ngModel)]="search" (input)="loadTools()"
+      placeholder="Buscar herramientas..." />
 
-    <button class="btn btn-primary" (click)="nuevoRegistro()">
-      <i class="fa fa-plus"></i> Nuevo registro
+    <button class="btn btn-primary" (click)="newTool()">
+      <i class="fa fa-plus me-1"></i> Nuevo registro
     </button>
   </div>
 
@@ -18,16 +17,17 @@
     <table class="table table-striped table-hover align-middle">
       <thead class="table-light">
         <tr>
-          <th (click)="onSortChange('code')">Código</th>
-          <th (click)="onSortChange('shape')">Forma</th>
-          <th (click)="onSortChange('station_size')">Tamaño estación</th>
-          <th (click)="onSortChange('measurement')">Medición</th>
-          <th (click)="onSortChange('angle')">Ángulo</th>
-          <th (click)="onSortChange('clarity')">Claridad</th>
-          <th (click)="onSortChange('lifecycle_statuses')">Vida</th>
-          <th>Opciones</th>
+          <th (click)="sortColumn = 'code'; loadTools()">Código</th>
+          <th (click)="sortColumn = 'shape'; loadTools()">Forma</th>
+          <th (click)="sortColumn = 'station_size'; loadTools()">Tamaño estación</th>
+          <th (click)="sortColumn = 'measurement'; loadTools()">Medición</th>
+          <th (click)="sortColumn = 'angle'; loadTools()">Ángulo</th>
+          <th (click)="sortColumn = 'clarity'; loadTools()">Claridad</th>
+          <th (click)="sortColumn = 'lifecycle_statuses'; loadTools()">Vida</th>
+          <th class="text-center">Opciones</th>
         </tr>
       </thead>
+
       <tbody>
         <tr *ngFor="let tool of catalogoTools">
           <td>{{ tool.code }}</td>
@@ -36,38 +36,148 @@
           <td>{{ tool.measurement }}</td>
           <td>{{ tool.angle }}</td>
           <td>{{ tool.clarity }}</td>
-          <td>{{ tool.lifecycle_statuses }} %</td>
-          <td>
-            <div class="btn-group btn-group-sm" role="group">
-              <button class="btn btn-warning" (click)="editarTool(tool.id)">
+          <td>{{ tool.lifecycle_statuses }}%</td>
+          <td class="text-center">
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-warning" (click)="editTool(tool)">
                 <i class="fa fa-edit"></i>
               </button>
-              <button class="btn btn-danger" (click)="eliminarTool(tool.id)">
+              <button class="btn btn-danger" (click)="deleteTool(tool.id)">
                 <i class="fa fa-trash"></i>
-              </button>
-              <button class="btn btn-info">
-                <i class="fa fa-download"></i>
-              </button>
+              </button> 
             </div>
+          </td>
+        </tr>
+        <tr *ngIf="catalogoTools.length === 0">
+          <td colspan="8" class="text-center text-muted py-3">
+            No se encontraron herramientas
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Paginación -->
-  <div class="d-flex justify-content-between align-items-center mt-3">
-    <div>Total de herramientas: {{ total }}</div>
+  <!-- 📄 Paginación -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
+    <div>Total de herramientas: <strong>{{ total }}</strong></div>
 
-    <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
-      (pageChange)="onPageChange($event)">
+    <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize" (pageChange)="loadTools()">
     </ngb-pagination>
 
-    <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+    <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="loadTools()">
       <option [ngValue]="5">5 por página</option>
       <option [ngValue]="10">10 por página</option>
       <option [ngValue]="20">20 por página</option>
     </select>
   </div>
-
 </div>
+
+<!-- 🧩 Modal de creación/edición -->
+<ng-template #toolModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ toolForm.get('id') ? 'Editar' : 'Nuevo' }} Registro</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="toolForm">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Código</label>
+          <input type="text" class="form-control" formControlName="code" />
+          <div class="text-danger small" *ngIf="toolForm.get('code')?.invalid && toolForm.get('code')?.touched">
+            Campo requerido (máx. 3 caracteres)
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Forma</label>
+          <input type="text" class="form-control" formControlName="shape" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Tamaño estación</label>
+          <input type="text" class="form-control" formControlName="station_size" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Medición</label>
+          <input type="text" class="form-control" formControlName="measurement" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Ángulo</label>
+          <input type="number" class="form-control" formControlName="angle" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Claridad</label>
+          <input type="text" class="form-control" formControlName="clarity" />
+        </div>
+
+        <!-- <div class="col-md-4">
+          <label class="form-label">Tipo de herramienta</label>
+          <input type="number" class="form-control" formControlName="tool_type_id" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Ubicación</label>
+          <input type="number" class="form-control" formControlName="location_id" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Proveedor</label>
+          <input type="number" class="form-control" formControlName="supplier_id" />
+        </div> -->
+        <!-- Tipo de herramienta -->
+        <div class="col-md-4">
+          <label class="form-label">Tipo de herramienta</label>
+          <select class="form-select" formControlName="tool_type_id">
+            <option [ngValue]="null" disabled selected>Seleccione una opción</option>
+            <option *ngFor="let t of toolTypes" [ngValue]="t.id">{{ t.name }}</option>
+          </select>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="col-md-4">
+          <label class="form-label">Ubicación</label>
+          <select class="form-select" formControlName="location_id">
+            <option [ngValue]="null" disabled selected>Seleccione una ubicación</option>
+            <option *ngFor="let l of locations" [ngValue]="l.id">{{ l.code }}</option>
+          </select>
+        </div>
+
+        <!-- Proveedor -->
+        <div class="col-md-4">
+          <label class="form-label">Proveedor</label>
+          <select class="form-select" formControlName="supplier_id">
+            <option [ngValue]="null" disabled selected>Seleccione un proveedor</option>
+            <option *ngFor="let s of suppliers" [ngValue]="s.id">{{ s.name }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Vida (%)</label>
+          <input type="number" class="form-control" formControlName="lifecycle_statuses" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Fecha adquisición</label>
+          <input type="date" class="form-control" formControlName="acquired_at" />
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Descripción</label>
+          <textarea class="form-control" rows="2" formControlName="description"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button class="btn btn-primary" [disabled]="toolForm.invalid" (click)="saveTool(modal)">
+      {{ toolForm.get('id') ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </div>
+</ng-template>
