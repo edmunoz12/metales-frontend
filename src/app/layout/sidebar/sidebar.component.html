@@ -4,21 +4,18 @@
     <ul class="list-group">
         <li class="list-group-item" *ngFor="let menu of combinedMenuItems">
             <!-- Menu principal -->  
-            <!-- <button (click)="toggleCollapse(menu.MenuID)" [attr.aria-expanded]="!collapsedState[menu.MenuID]"> -->
+            <!-- class="list-group" *ngIf="menu.Submenu && menu.Submenu.length > 0" [ngClass]="{'collapse': collapsedState[menu.id]}" > -->
             <button class="btn-menu" (click)="toggleCollapse(menu.id)">
-                <a class="menu-link" [routerLink]="menu.menu">
+                <a class="menu-link" [routerLink]="menu.id === 1 ? '/HomeComponent' : menu.menu">
                     {{ menu.Menu }} &nbsp; &nbsp; <i class="{{menu.icono}}"></i>
-                </a>
-                
+                </a> 
             </button>
 
             <!-- Submenú -->
             <ul class="list-group" [ngClass]="{'collapse': collapsedState[menu.id]}">
                 <li class="list-group-item" *ngFor="let sub of menu.Submenu">
-                    <button class="btn-submenu">
-                        <!--<a class="submenu-link" [routerLink]="sub.Link">{{ sub.Link }}</a>-->
-                        <a class="submenu-link" [routerLink]="sub.Link">{{ sub.Nombre }} <i class="{{sub.icono}}"></i> </a> 
-                        
+                    <button class="btn-submenu"> 
+                        <a class="submenu-link" [routerLink]="sub.Link">{{ sub.Nombre }} <i class="{{sub.icono}}"></i> </a>                   
                     </button>
                 </li>
             </ul>

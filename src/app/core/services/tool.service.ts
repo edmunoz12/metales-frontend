@@ -21,31 +21,7 @@ export interface Tool {
 @Injectable({
   providedIn: 'root'
 })
-export class ToolService {
- /* private apiUrl = 'http://localhost/metales/public/api/index';
-
-  constructor(private http: HttpClient) {}
-
-  getTools(search: string, page: number, pageSize: number, sortColumn: string, sortDirection: string) {
-    let params = new HttpParams()
-      .set('search', search)
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString())
-      .set('sortColumn', sortColumn)
-      .set('sortDirection', sortDirection);
-
-    return this.http.get<any>(this.apiUrl, { params });
-  }
-
-  createTool(data: any) {
-  return this.http.post<any>('http://localhost/metales/public/api/tools', data);
-  }
-
-  deleteTool(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
-  }
-  */
-
+export class ToolService { 
   // URL RESTful base
   private apiUrl = 'http://localhost/metales/public/api/tools';
   private api = 'http://localhost/metales/public/api';

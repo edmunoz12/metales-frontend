@@ -103,7 +103,7 @@ export class ToolComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al cargar herramientas:', err);
-          Swal.fire('Error', 'No se pudieron cargar las herramientas.', 'error');
+          //Swal.fire('Error', 'No se pudieron cargar las herramientas.', 'error');
         }
       });
   }
@@ -115,13 +115,11 @@ export class ToolComponent implements OnInit {
     this.modalService.open(this.toolModal, { backdrop: 'static', centered: true });
   }
 
-  // tool.component.ts
-  editTool(tool: any) {
-  // Cargamos los valores del registro seleccionado en el formulario
-  this.toolForm.patchValue(tool);
-
-  // Abrimos el modal de edición
+  // modal de edición, Cargamos los valores del registro 
+  editTool(tool: any) {  
+  this.toolForm.patchValue(tool); 
   this.modalService.open(this.toolModal, { backdrop: 'static' });
+
   }
 
   // Guarda nueva herramienta
