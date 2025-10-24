@@ -44,7 +44,7 @@
               </button>
               <button class="btn btn-danger" (click)="deleteTool(tool.id)">
                 <i class="fa fa-trash"></i>
-              </button> 
+              </button>
             </div>
           </td>
         </tr>
@@ -57,7 +57,7 @@
     </table>
   </div>
 
-  <!-- Paginación -->
+  <!-- 📄 Paginación -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
     <div>Total de herramientas: <strong>{{ total }}</strong></div>
 
@@ -72,7 +72,7 @@
   </div>
 </div>
 
-<!-- Modal de creación/edición -->
+<!-- 🧩 Modal de creación/edición -->
 <ng-template #toolModal let-modal>
   <div class="modal-header">
     <h5 class="modal-title">{{ toolForm.get('id') ? 'Editar' : 'Nuevo' }} Registro</h5>
@@ -132,9 +132,9 @@
         <!-- Tipo de herramienta -->
         <div class="col-md-4">
           <label class="form-label">Tipo de herramienta</label>
-          <select class="form-select" formControlName="tool_type_id">
-            <option [ngValue]="null" disabled selected>Seleccione una opción</option>
-            <option *ngFor="let t of toolTypes" [ngValue]="t.id">{{ t.name }}</option>
+          <select class="form-select" formControlName="tool_type_id">  
+            <option [value]="null" disabled>Seleccione una opción</option>
+            <option *ngFor="let t of toolTypes" [value]="t.id">{{ t.name }}</option>
           </select>
         </div>
 
@@ -142,7 +142,7 @@
         <div class="col-md-4">
           <label class="form-label">Ubicación</label>
           <select class="form-select" formControlName="location_id">
-            <option [ngValue]="null" disabled selected>Seleccione una ubicación</option>
+            <option [ngValue]="null" disabled>Seleccione una ubicación</option>
             <option *ngFor="let l of locations" [ngValue]="l.id">{{ l.code }}</option>
           </select>
         </div>

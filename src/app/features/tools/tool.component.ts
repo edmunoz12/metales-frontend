@@ -39,11 +39,35 @@ export class ToolComponent implements OnInit {
     private toolService: ToolService,
     private fb: FormBuilder,
     private modalService: NgbModal
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadTools(); //cargar todos los registros
     this.initForm();
+
+    // Cargar tipos de herramienta
+    this.toolService.getToolTypes().subscribe(data => {
+      this.toolTypes = data.map(t => ({
+        id: Number(t.id),
+        name: t.name
+      }));
+    });
+
+    // Cargar ubicaciones
+    this.toolService.getLocations().subscribe(data => {
+      this.locations = data.map(l => ({
+        id: Number(l.id),
+        code: l.code
+      }));
+    });
+
+    // Cargar proveedores
+    this.toolService.getSuppliers().subscribe(data => {
+      this.suppliers = data.map(s => ({
+        id: Number(s.id),
+        name: s.name
+      }));
+    });
 
     this.toolService.getToolTypes().subscribe(data => this.toolTypes = data);
     this.toolService.getLocations().subscribe(data => this.locations = data);
@@ -98,6 +122,7 @@ export class ToolComponent implements OnInit {
     this.toolService.getTools(this.search, this.currentPage, this.pageSize, this.sortColumn, this.sortDirection)
       .subscribe({
         next: (response) => {
+          console.log('Respuesta del backend:', response);
           this.catalogoTools = response.data || response; // depende cómo responda tu backend
           this.total = response.total || this.catalogoTools.length;
         },
@@ -115,11 +140,32 @@ export class ToolComponent implements OnInit {
     this.modalService.open(this.toolModal, { backdrop: 'static', centered: true });
   }
 
-  // modal de edición, Cargamos los valores del registro 
-  editTool(tool: any) {  
-  this.toolForm.patchValue(tool); 
-  this.modalService.open(this.toolModal, { backdrop: 'static' });
+  // tool.component.ts
+  editTool(tool: any): void {
 
+    console.log('tool recibido:', tool);
+  console.log('tool_type_id tipo:',  'valor:', tool.tool_type_id);
+
+    const formattedTool = {
+      id: Number(tool.id),
+      code: String(tool.code),
+      description: String(tool.description),
+      shape: String(tool.shape),
+      station_size: Number(tool.station_size),
+      measurement: Number(tool.measurement),
+      lifecycle_statuses: Number(tool.lifecycle_statuses),
+      angle: Number(tool.angle),
+      clarity: String(tool.clarity),
+      tool_type_id: tool.tool_type_id ? Number(tool.tool_type_id) : null, // <-- aquí
+      location_id: tool.location_id ? Number(tool.location_id) : null,
+      supplier_id: tool.supplier_id ? Number(tool.supplier_id) : null,
+      acquired_at: tool.acquired_at
+        ? tool.acquired_at.split('T')[0]  // convierte "2025-10-17T00:00:00.000000Z" → "2025-10-17"
+        : ''
+    };
+
+    this.toolForm.patchValue(formattedTool);
+    this.modalService.open(this.toolModal, { backdrop: 'static' });
   }
 
   // Guarda nueva herramienta
@@ -134,43 +180,43 @@ export class ToolComponent implements OnInit {
     if (formData.id) {
       // Modo edición (usa PUT)
       this.toolService.updateTool(formData.id, formData).subscribe({
-      next: (updatedTool) => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Actualización exitosa',
-        text: 'La herramienta fue actualizada correctamente.'
-      }).then(() => {
-        modalRef.close();
-        this.loadTools(); // recarga lista
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Actualización exitosa',
+            text: 'La herramienta fue actualizada correctamente.'
+          }).then(() => {
+            modalRef.close();
+            this.loadTools(); // recarga lista
+          });
+        },
+        error: (error) => {
+          console.error(error);
+          Swal.fire('Error', 'No se pudo actualizar el registro.', 'error');
+        }
       });
-    },
-    error: (error) => {
-      console.error(error);
-      Swal.fire('Error', 'No se pudo actualizar el registro.', 'error');
-    }
-  });
     } else {
-    // Modo creación
-    this.toolService.createTool(formData).subscribe({
-      next: (newTool) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Registro creado',
-          text: 'La herramienta fue registrada exitosamente.'
-        }).then(() => {
-          modalRef.close();
-          this.catalogoTools.unshift(newTool);
-          this.total++;
-        });
-      },
-      error: (error) => {
-        console.error(error);
-        Swal.fire('Error', 'No se pudo guardar el registro.', 'error');
-      }
-    });
-  }
+      // Modo creación
+      this.toolService.createTool(formData).subscribe({
+        next: (newTool) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Registro creado',
+            text: 'La herramienta fue registrada exitosamente.'
+          }).then(() => {
+            modalRef.close();
+            this.catalogoTools.unshift(newTool);
+            this.total++;
+          });
+        },
+        error: (error) => {
+          console.error(error);
+          Swal.fire('Error', 'No se pudo guardar el registro.', 'error');
+        }
+      });
+    }
 
-    
+
   }
 
   // Elimina una herramienta
