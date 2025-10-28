@@ -113,7 +113,7 @@ export class ToolComponent implements OnInit {
       supplier_id: ['', Validators.required],
       lifecycle_statuses: ['', Validators.required],
       acquired_at: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
     });
   }
 
@@ -151,8 +151,8 @@ export class ToolComponent implements OnInit {
       code: String(tool.code),
       description: String(tool.description),
       shape: String(tool.shape),
-      station_size: Number(tool.station_size),
-      measurement: Number(tool.measurement),
+      station_size: String(tool.station_size),
+      measurement: String(tool.measurement),
       lifecycle_statuses: Number(tool.lifecycle_statuses),
       angle: Number(tool.angle),
       clarity: String(tool.clarity),
