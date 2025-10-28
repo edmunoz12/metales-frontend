@@ -121,8 +121,7 @@ export class ToolComponent implements OnInit {
   loadTools(): void {
     this.toolService.getTools(this.search, this.currentPage, this.pageSize, this.sortColumn, this.sortDirection)
       .subscribe({
-        next: (response) => {
-          console.log('Respuesta del backend:', response);
+        next: (response) => { 
           this.catalogoTools = response.data || response; // depende cómo responda tu backend
           this.total = response.total || this.catalogoTools.length;
         },
@@ -142,10 +141,6 @@ export class ToolComponent implements OnInit {
 
   // tool.component.ts
   editTool(tool: any): void {
-
-    console.log('tool recibido:', tool);
-  console.log('tool_type_id tipo:',  'valor:', tool.tool_type_id);
-
     const formattedTool = {
       id: Number(tool.id),
       code: String(tool.code),

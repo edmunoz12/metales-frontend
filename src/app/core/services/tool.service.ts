@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 export interface Tool {
   id?: number;
@@ -21,11 +21,11 @@ export interface Tool {
 @Injectable({
   providedIn: 'root'
 })
-export class ToolService { 
+export class ToolService {
   // URL RESTful base
   private apiUrl = 'http://localhost/metales/public/api/tools';
   private api = 'http://localhost/metales/public/api';
-   
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -49,7 +49,7 @@ export class ToolService {
   }
 
   //Catalagos
-  getToolTypes(): Observable<{ id: number; name: string }[]> { 
+  getToolTypes(): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`${this.api}/tooTypes`);
   }
   getLocations(): Observable<{ id: number; code: string }[]> {
@@ -57,6 +57,13 @@ export class ToolService {
   }
   getSuppliers(): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`${this.api}/suppliers`);
+  }
+
+  /* Count Tools */
+  getToolCount(): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.apiUrl}/count`).pipe(
+      map(res => res.count)
+    );
   }
 
   /**
