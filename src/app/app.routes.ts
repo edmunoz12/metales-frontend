@@ -3,6 +3,7 @@ import { MainComponent } from './main/main/main.component';
 import { ToolComponent } from './features/tools/tool.component';
 import { HomeComponent } from './features/dashboard/home.component';
 import { ToolsWearReportComponent } from './features/tools-wear-report/tools-wear-report.component';
+import { InsertionComponent } from './features/insertion/insertion.component';
 
 
 export const routes: Routes = [
@@ -12,7 +13,8 @@ export const routes: Routes = [
             children: [
             { path: '', component: HomeComponent },
             { path: 'tool', component: ToolComponent },
-            { path: 'tools-wear-report', component: ToolsWearReportComponent }
+            { path: 'tools-wear-report', component: ToolsWearReportComponent },
+            { path: 'insertion', component: InsertionComponent }
             // Rutas hijas para los componentes dentro del Sidebar
             /*{ path: 'tools', component: UnidadesComponent },
             { path: 'mantenimiento-servicios', component: MantenimientoServiciosComponent },
