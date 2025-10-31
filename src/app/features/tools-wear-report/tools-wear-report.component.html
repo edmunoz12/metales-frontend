@@ -3,13 +3,8 @@
 
   <!-- Búsqueda -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-    <input
-      type="text"
-      class="form-control w-50"
-      [(ngModel)]="search"
-      (input)="onSearch(search)"
-      placeholder="Buscar herramienta, ubicación o tipo..."
-    />
+    <input type="text" class="form-control w-50" [(ngModel)]="search" (input)="onSearch(search)"
+      placeholder="Buscar herramienta, ubicación o tipo..." />
   </div>
 
   <!--  Tabla -->
@@ -32,20 +27,20 @@
           <td>{{ report.location_name }}</td>
           <td>{{ report.location_code }}</td>
           <td>
-            <div class="progress" style="height: 20px;">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                [style.width.%]="report.lifecycle_statuses"
-                [ngClass]="{
+            <ng-container
+              *ngIf="report.lifecycle_statuses !== null && report.lifecycle_statuses !== undefined; else noData">
+              <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar" [style.width.%]="report.lifecycle_statuses" [ngClass]="{
                   'bg-success': report.lifecycle_statuses > 60,
                   'bg-warning': report.lifecycle_statuses <= 60 && report.lifecycle_statuses > 30,
-                  'bg-danger': report.lifecycle_statuses <= 30
-                }"
-              >
-                {{ report.lifecycle_statuses }}%
+                  'bg-danger': report.lifecycle_statuses <= 30}">
+                  {{ report.lifecycle_statuses }}%
+                </div>
               </div>
-            </div>
+            </ng-container>
+            <ng-template #noData>
+              N/A
+            </ng-template>
           </td>
         </tr>
 
@@ -62,12 +57,8 @@
   <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
     <div>Total de registros: <strong>{{ total }}</strong></div>
 
-    <ngb-pagination
-      [collectionSize]="total"
-      [(page)]="currentPage"
-      [pageSize]="pageSize"
-      (pageChange)="onPageChange($event)"
-    ></ngb-pagination>
+    <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)"></ngb-pagination>
 
     <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
       <option [ngValue]="5">5 por página</option>
