@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class MenuService {
 
-  //private api: string = 'http://127.0.0.1:8000/metales/public/api/'; 
   private api: string = 'http://localhost/metales/public/api/'; 
 
   constructor(private http: HttpClient) { }
