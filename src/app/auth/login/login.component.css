@@ -1,0 +1,12 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f7f9fc;
+}
+
+.card {
+  width: 350px;
+  border-radius: 8px;
+}

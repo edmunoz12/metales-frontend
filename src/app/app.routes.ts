@@ -5,24 +5,28 @@ import { HomeComponent } from './features/dashboard/home.component';
 import { ToolsWearReportComponent } from './features/tools-wear-report/tools-wear-report.component';
 import { InsertionComponent } from './features/insertion/insertion.component';
 
+// Auth
+import { LoginComponent } from './auth/login/login.component';
+import { authGuard } from './guards/auth.guard';
+
 
 export const routes: Routes = [
-    {
-        path: '', 
-            component: MainComponent, 
-            children: [
-            { path: '', component: HomeComponent },
-            { path: 'tool', component: ToolComponent },
-            { path: 'tools-wear-report', component: ToolsWearReportComponent },
-            { path: 'insertion', component: InsertionComponent }
-            // Rutas hijas para los componentes dentro del Sidebar
-            /*{ path: 'tools', component: UnidadesComponent },
-            { path: 'mantenimiento-servicios', component: MantenimientoServiciosComponent },
-            { path: 'conductores', component: ConductoresComponent },
-            { path: '', redirectTo: 'unidades', pathMatch: 'full' }*/
-        ]
-    },
-    {
-        path: '**', redirectTo: '', pathMatch: 'full'
-    }
+    // Rutas públicas
+  { path: 'login', component: LoginComponent },
+
+  // Rutas protegidas (requieren token)
+  //login() ahora navega a / que carga MainComponent con HomeComponent por defecto.
+  {
+    path: '',
+    component: MainComponent,
+    canActivate: [authGuard], // protege todas las rutas hijas
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },  // Redirige '' a 'home'
+      { path: 'home', component: HomeComponent },
+      { path: 'tool', component: ToolComponent },
+      { path: 'tools-wear-report', component: ToolsWearReportComponent },
+      { path: 'insertion', component: InsertionComponent },
+    ],
+  },  
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
