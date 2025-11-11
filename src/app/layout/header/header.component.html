@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg ">
         <div class="container-fluid">
             <!-- Imagen de la empresa -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/home">
                 <img src="logo.png" alt="Logo Empresa" class="logo-empresa">
             </a>
 
@@ -16,22 +16,27 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                        <a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Servicios</a>
+                        <a class="nav-link" routerLink="/tool" routerLinkActive="active">Herramientas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contacto</a>
+                        <a class="nav-link" routerLink="/tools-wear-report" routerLinkActive="active">Reportes</a>
                     </li>
                 </ul>
             </div>
 
-            <!-- Foto y nombre del usuario -->
-            <div class="d-flex align-items-center">
-                <img src="assets/foto-usuario.jpg" alt="Foto Usuario" class="rounded-circle foto-usuario">
-                <span class="ms-2 nombre-usuario">Edgar Muñoz</span>
+            <!-- Usuario + Logout -->
+            <div class="d-flex align-items-center ms-3" *ngIf="user; else loadingUser"> 
+                <span class="ms-2 user-name">{{ user.name }}</span>
+                <button class="btn btn-danger ms-3" (click)="logout()">Cerrar sesión</button>
             </div>
+
+            <ng-template #loadingUser>
+                <span class="text-light">Cargando usuario...</span>
+            </ng-template>
+
         </div>
     </nav>
 </header>

@@ -66,4 +66,12 @@ header {
     height: 20px;
 }
 
+.user-name {
+  font-weight: 500;
+  color: rgb(7 139 197);
+}
 
+.btn-outline-light {
+  border-color: rgb(36, 35, 35);
+  color: rgb(41, 39, 39);
+}
