@@ -8,6 +8,7 @@ import { InsertionComponent } from './features/insertion/insertion.component';
 // Auth
 import { LoginComponent } from './auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { AssemblyElectricosComponent } from './features/electricos/assembly-electricos.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,8 @@ export const routes: Routes = [
       { path: 'tool', component: ToolComponent },
       { path: 'tools-wear-report', component: ToolsWearReportComponent },
       { path: 'insertion', component: InsertionComponent },
+      { path: 'assembly', component: AssemblyElectricosComponent },
+
     ],
   },  
   { path: '**', redirectTo: '', pathMatch: 'full' },

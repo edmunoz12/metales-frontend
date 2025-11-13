@@ -1,0 +1,258 @@
+<div class="container mt-4">
+
+    <h1 class="mb-4">ENSAMBLE ELECTRICOS</h1>
+
+    <!-- <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <input type="text" class="form-control w-25" [(ngModel)]="search" (input)="assemblies()"
+            placeholder="Numero de parte..." />
+
+        <button class="btn btn-primary" (click)="newAssembly()">
+            <i class="fa fa-plus me-1"></i> Nuevo registro
+        </button>
+    </div> -->
+
+    <div class="row mb-3">
+        <div class="col-md-4 col-12 mb-2 mb-md-0">
+            <input type="text" class="form-control w-100" [(ngModel)]="search" (input)="assemblies()"
+            placeholder="Numero de parte..." />
+        </div>
+        <div class="col-md-8 col-12 d-flex justify-content-end">
+            <button class="btn btn-primary" (click)="newAssembly()">
+                <i class="fa fa-plus me-1"></i> Nuevo registro
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-white" style="background: linear-gradient(135deg, #2f673c, #073c12);">NO
+                    PRIORITARIO</div>
+                <div class="card-body">
+                    <h5 class="card-title">Lista de ensambles 11/11/2025</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <button class="btn btn-custom btn-gradient-success">1.- NumPart: 1235245
+                                <span class="circle-badge">150</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-light">2.- NumPart: 15688
+                                <span class="circle-badge">550</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-success">3.- NumPart: 12352345
+                                <span class="circle-badge">120</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-light">4.- NumPart: 163548
+                                <span class="circle-badge">100</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-success">5.- NumPart: 123423
+                                <span class="circle-badge">10</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <!-- <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);">Nuevo</button>
+                    <button class="btn border text-white" style="background: linear-gradient(135deg, #a1a1a1, #616663);">Demos</button> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <!-- <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-white" style="background: linear-gradient(135deg, #af2111, #470b0b);">PRIORITARIO</div> 
+                <div class="card-body">
+                    <h5 class="card-title">Lista de ensambles 11/11/2025</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <button class="btn btn-custom btn-gradient-danger">1.- NumPart: 15688
+                                <span class="circle-badge">55</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-light">2.- NumPart: 1235245
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-danger">3.- NumPart: 163548
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-light">4.- NumPart: 12352345
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-danger">5.- NumPart: 123423
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);">Nuevo</button>
+                    <button class="btn border text-white" style="background: linear-gradient(135deg, #a1a1a1, #616663);">Demos</button>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Card 3 -->
+        <!-- <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-white" style="background: linear-gradient(135deg, #1e1c1c, #615656);">MONITOREO</div>  
+                <div class="card-body">
+                    <h5 class="card-title">Semana 1</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <button class="btn btn-custom btn-gradient-info">1.- NumPart: 15688
+                                <span class="circle-badge">55</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-light">2.- NumPart: 1235245
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-info">3.- NumPart: 163548
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-light">4.- NumPart: 12352345
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-custom btn-gradient-info">5.- NumPart: 123423
+                                <span class="circle-badge">15</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);">Tutorials</button>
+                    <button class="btn border text-white" style="background: linear-gradient(135deg, #1a1818, #474343);">Demos</button>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- TABLA -->
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>**</th>
+                            <th>NumPart</th>
+                            <th>Cantidad</th>
+                            <th>Tipo</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- Recorremos el array catalogoAssemblies -->
+                        <tr *ngFor="let item of catalogoAssemblies; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ item.part_number }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.priority_type === 1 ? 'Normal' : 'Prioritario' }}</td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-warning" (click)="editAssembly(item)">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger" (click)="deleteItem(item.id)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Mensaje si no hay registros -->
+                        <tr *ngIf="catalogoAssemblies.length === 0">
+                            <td colspan="5" class="text-center text-muted py-3">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!--Paginación -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
+                <div>Total de ensambles: <strong>{{ total }}</strong></div>
+
+                <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
+                    (pageChange)="assemblies()">
+                </ngb-pagination>
+
+                <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="assemblies()">
+                    <option [ngValue]="5">5 por página</option>
+                    <option [ngValue]="10">10 por página</option>
+                    <option [ngValue]="20">20 por página</option>
+                </select>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<!-- Modal de creación/edición -->
+<ng-template #assemblyModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">{{ assemblyForm.get('id')?.value ? 'Editar' : 'Generar nuevo' }} ensamble</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body">
+        <form [formGroup]="assemblyForm">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">NumPart:</label>
+                    <input type="text" class="form-control" formControlName="part_number" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" class="form-control" formControlName="quantity" />
+                </div>
+
+                <!-- Tipo -->
+                <div class="col-md-4">
+                    <label class="form-label">Prioridad</label>
+                    <select class="form-select" formControlName="priority_type">
+                        <option [ngValue]="null" disabled>Seleccione una opción</option>
+                        <option *ngFor="let p of priorityOptions" [ngValue]="p.id">
+                            {{ p.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" class="form-control" formControlName="assembly_date" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);" 
+            (click)="saveAssembly(modal)">{{ assemblyForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}</button> 
+
+        <button class="btn border text-white" style="background: linear-gradient(135deg, #a1a1a1, #616663);"
+            (click)="modal.dismiss()">Cancelar</button>
+    </div>
+</ng-template>

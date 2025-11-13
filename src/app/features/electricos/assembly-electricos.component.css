@@ -1,0 +1,117 @@
+.card-title {
+    font-size: 20px;
+}
+
+.card-body {
+    background-color: #f8f9fa;
+}
+
+.card-footer {
+    background-color: #f1f1f1;
+}
+
+.btn-custom {
+    width: 100%;
+    font-weight: bold;
+    text-align: left;
+    justify-content: space-between;
+    display: inline-flex;
+    align-items: center;
+    margin: 4px 0; 
+}
+
+.card-header {  
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+ 
+/* CÍRCULO CON NÚMERO ** */
+.circle-badge {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-left: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+/* Flecha hacia abajo debajo del círculo */
+.circle-badge::after {
+  content: "";
+  position: absolute;
+  bottom: -15px; /* separación del círculo */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid #6c757d; /* color de la flecha (gris Bootstrap) */
+}
+
+/* Quitar flecha del último elemento (último proceso) */
+.process-list li:last-child .circle-badge::after {
+  display: none;
+}
+ 
+.btn-gradient-info:hover,
+.btn-gradient-success:hover,
+.btn-gradient-danger:hover {
+  opacity: 0.9;
+}
+
+.btn-gradient-primary{
+    background: linear-gradient(45deg, #000, #555);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-secondary{
+    background: linear-gradient(45deg, #2d2d2d, #c7c7c7);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-success{
+    background: linear-gradient(45deg, #1e4131, #4aad61);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-info{
+    background: linear-gradient(45deg, #151814, #a4e3ff);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-warning{
+    background: linear-gradient(45deg, #000, #555);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-danger{
+    background: linear-gradient(45deg, #af0516, #ab8383);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-dark{
+    background: linear-gradient(45deg, #000, #555);
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+.btn-gradient-light{
+    background: linear-gradient(45deg, #d8d9d3, #f5f5f5);
+    color: #5e5b5b;
+    border: none;
+    transition: background 0.3s;
+}
