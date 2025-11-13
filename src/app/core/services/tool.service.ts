@@ -50,7 +50,7 @@ export class ToolService {
 
   //Catalagos
   getToolTypes(): Observable<{ id: number; name: string }[]> {
-    return this.http.get<{ id: number; name: string }[]>(`${this.api}/tooTypes`);
+    return this.http.get<{ id: number; name: string }[]>(`${this.api}/toolTypes`);
   }
   getLocations(): Observable<{ id: number; code: string }[]> {
     return this.http.get<{ id: number; code: string }[]>(`${this.api}/locations`);

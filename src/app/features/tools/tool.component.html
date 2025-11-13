@@ -115,26 +115,13 @@
           <input type="text" class="form-control" formControlName="clarity" />
         </div>
 
-        <!-- <div class="col-md-4">
-          <label class="form-label">Tipo de herramienta</label>
-          <input type="number" class="form-control" formControlName="tool_type_id" />
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label">Ubicación</label>
-          <input type="number" class="form-control" formControlName="location_id" />
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label">Proveedor</label>
-          <input type="number" class="form-control" formControlName="supplier_id" />
-        </div> -->
+        <!-- -->
         <!-- Tipo de herramienta -->
         <div class="col-md-4">
           <label class="form-label">Tipo de herramienta</label>
           <select class="form-select" formControlName="tool_type_id">  
-            <option [value]="null" disabled>Seleccione una opción</option>
-            <option *ngFor="let t of toolTypes" [value]="t.id">{{ t.name }}</option>
+            <option [ngValue]="null" disabled>Seleccione una opción</option>
+            <option *ngFor="let t of toolTypes" [ngValue]="t.id">{{ t.name }}</option>
           </select>
         </div>
 

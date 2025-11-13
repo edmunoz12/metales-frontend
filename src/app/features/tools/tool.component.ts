@@ -151,7 +151,7 @@ export class ToolComponent implements OnInit {
       lifecycle_statuses: Number(tool.lifecycle_statuses),
       angle: Number(tool.angle),
       clarity: String(tool.clarity),
-      tool_type_id: tool.tool_type_id ? Number(tool.tool_type_id) : null, // <-- aquí
+      tool_type_id: tool.tool_type_id ? Number(tool.tool_type_id) : null, 
       location_id: tool.location_id ? Number(tool.location_id) : null,
       supplier_id: tool.supplier_id ? Number(tool.supplier_id) : null,
       acquired_at: tool.acquired_at
