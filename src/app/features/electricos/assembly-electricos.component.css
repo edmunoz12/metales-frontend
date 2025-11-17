@@ -53,7 +53,7 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 10px solid #6c757d; /* color de la flecha (gris Bootstrap) */
+  border-top: 10px solid #ac6e71; /* color de la flecha (gris Bootstrap) */
 }
 
 /* Quitar flecha del último elemento (último proceso) */
@@ -114,4 +114,23 @@
     color: #5e5b5b;
     border: none;
     transition: background 0.3s;
+}
+/* Estilo para span prioridad 1 */
+.priority-danger {
+  background: linear-gradient(45deg, #a72b2b, #ff1a1a); /* ejemplo degradado rojo */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+/* Estilo para span prioridad 2 */
+.priority-light {
+  background: linear-gradient(45deg, #f0f0f0, #d9d9d9); /* ejemplo degradado gris claro */
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 10px;
 }

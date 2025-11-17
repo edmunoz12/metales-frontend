@@ -32,7 +32,7 @@ export class AssemblyElectricosComponent implements OnInit {
 
   priorityOptions = [
     { id: 1, name: 'Prioritario' },
-    { id: 2, name: 'No prioritario' }
+    { id: 2, name: 'Normal' }
   ];
 
   constructor(
@@ -64,6 +64,10 @@ export class AssemblyElectricosComponent implements OnInit {
   }
 
 
+  get topAssemblies() {
+    return this.catalogoAssemblies.slice(0, 8).reverse();
+  }
+
   private initForm(): void {
     this.assemblyForm = this.fb.group({
       id: [null],
@@ -83,7 +87,7 @@ export class AssemblyElectricosComponent implements OnInit {
           this.total = response.total || this.catalogoAssemblies.length;
         },
         error: (err) => {
-          console.error('Error al cargar datos:', err); 
+          console.error('Error al cargar datos:', err);
         }
       });
   }
@@ -98,8 +102,8 @@ export class AssemblyElectricosComponent implements OnInit {
   editAssembly(assembly: any): void {
     const formattedAssembly = {
       id: Number(assembly.id),
-      part_number: String(assembly.part_number),      
-      quantity: Number(assembly.quantity),            
+      part_number: String(assembly.part_number),
+      quantity: Number(assembly.quantity),
       priority_type: Number(assembly.priority_type),  // 1 prioridad  o 2 no prioritario restringido
       assembly_date: assembly.assembly_date
         ? assembly.assembly_date.split('T')[0]        // "2025-10-17T00:00:00.000Z" → "2025-10-17"
@@ -108,10 +112,10 @@ export class AssemblyElectricosComponent implements OnInit {
 
     // Pone los valores en el formulario
     this.assemblyForm.patchValue(formattedAssembly);
-    this.modalService.open(this.assemblyModal, { backdrop: 'static', centered: true  });
+    this.modalService.open(this.assemblyModal, { backdrop: 'static', centered: true });
   }
 
-  
+
   saveAssembly(modalRef: any): void {
     if (this.assemblyForm.invalid) {
       this.assemblyForm.markAllAsTouched();
@@ -120,7 +124,7 @@ export class AssemblyElectricosComponent implements OnInit {
 
     const formData = this.assemblyForm.value;
 
-    if (formData.id) { 
+    if (formData.id) {
       this.assemblyService.updateAssembly(formData.id, formData).subscribe({
         next: () => {
           Swal.fire({
@@ -156,10 +160,10 @@ export class AssemblyElectricosComponent implements OnInit {
           Swal.fire('Error', 'No se pudo guardar el registro.', 'error');
         }
       });
-    } 
+    }
   }
 
-  
+
   deleteItem(assemblyId: number): void {
     Swal.fire({
       title: '¿Eliminar registro?',
