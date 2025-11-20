@@ -5,14 +5,13 @@ import { Observable } from 'rxjs';
 export interface Insertion {
   id?: number;
   code: string;
-  shape: string;
-  station_size: string;
+  tool_type_id: number;
   measurement: string;
-  angle: number;
-  clarity: string;
-  insertion_type_id: number;
-  location_id: number;
   supplier_id: number; 
+  model: string;
+  style: string;
+  location_id: number;
+  report_type_id: number; 
   acquired_at: string;
   description?: string;
 }
@@ -47,16 +46,37 @@ export class InsertionService {
 
   // Catálogos dinámicos
   getToolTypes(): Observable<{ id: number; name: string }[]> {
-    return this.http.get<{ id: number; name: string }[]>(`${this.api}/tooTypes`);
+    return this.http.get<{ id: number; name: string }[]>(`${this.api}/toolTypes`);
   }
 
   getLocations(): Observable<{ id: number; code: string }[]> {
     return this.http.get<{ id: number; code: string }[]>(`${this.api}/locations`);
   }
-
+  
   getSuppliers(): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`${this.api}/suppliers`);
   }
  
-  
+  /**
+   * Crear nueva herramienta
+   */
+  createTool(data: Insertion): Observable<Insertion> {
+    return this.http.post<Insertion>(this.apiUrl, data);
+  }
+
+  /**
+   * Actualizar herramienta existente
+   */
+  updateTool(id: number, data: any): Observable<any> {
+    console.log('method updateTool:',data );
+    return this.http.put<Insertion>(`${this.apiUrl}/${id}`, data);
+  }
+
+  /**
+   * Eliminar herramienta
+   */
+  deleteTool(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+     
 }

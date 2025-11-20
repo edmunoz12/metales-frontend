@@ -1,0 +1,17 @@
+.tag {
+  padding: 3px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Gradiente azul para Doblado */
+.tag-blue {
+  background: linear-gradient(135deg, #1e90ff, #00bfff);
+}
+
+/* Gradiente verde para Inserción */
+.tag-green {
+  background: linear-gradient(135deg, #32cd32, #2ecc71);
+}

@@ -1,10 +1,14 @@
 <div class="container mt-4">
-  <h1 class="mb-4">CATÁLOGO DE INSERCIONES</h1>
+  <h1 class="mb-4">CATÁLOGO DE INSERCION Y DOBLADO</h1> 
 
-  <!-- Búsqueda -->
+  <!-- Encabezado con búsqueda y botón nuevo -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-    <input type="text" class="form-control w-50" [(ngModel)]="search" 
-           (ngModelChange)="onSearch($event)" placeholder="Buscar inserciones..." />
+    <input type="text" class="form-control w-50" [(ngModel)]="search" (ngModelChange)="onSearch($event)"
+      placeholder="Búsqueda general..." />
+
+    <button class="btn btn-primary" (click)="newTool()">
+      <i class="fa fa-plus me-1"></i> Nuevo registro
+    </button>
   </div>
 
   <!-- Tabla de inserciones -->
@@ -13,23 +17,44 @@
       <thead class="table-light">
         <tr>
           <th (click)="onSortChange('code')">Código</th>
-          <th (click)="onSortChange('shape')">Forma</th>
-          <th (click)="onSortChange('station_size')">Tamaño estación</th>
+          <th>TipoHerramienta</th>
+          <th>Modelo</th>
           <th (click)="onSortChange('measurement')">Medición</th>
-          <th (click)="onSortChange('angle')">Ángulo</th>
-          <th (click)="onSortChange('clarity')">Claridad</th>
-          <!--<th (click)="onSortChange('lifecycle_statuses')">Vida (%)</th>-->
+          <th>Proveedor</th>
+          <th>Estilo</th>
+          <th>Tipo</th>
+          <th class="text-center">Opciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let insertion of insertions">
           <td>{{ insertion.code }}</td>
-          <td>{{ insertion.shape }}</td>
-          <td>{{ insertion.station_size }}</td>
+          <td>
+            {{ insertion.tool_type_id == 1 ? 'punzón' : (insertion.tool_type_id == 2 ? 'matriz' : '-') }}
+          </td>
+          <td>{{ insertion.model }}</td>
           <td>{{ insertion.measurement }}</td>
-          <td>{{ insertion.angle }}</td>
-          <td>{{ insertion.clarity }}</td>
-          <!--<td>{{ insertion.lifecycle_statuses }}</td>-->
+          <td>{{ insertion.supplier_name }}</td>
+          <td>{{ insertion.style }}</td>
+          <td>
+            <span [ngClass]="{
+                                'tag-blue': insertion.report_type_id == 2,
+                                'tag-green': insertion.report_type_id == 3
+                              }" class="tag">
+              {{ insertion.report_type_id == 2 ? 'Doblado' : 'Inserción' }}
+            </span> 
+          </td>
+          <!-- Opciones -->
+          <td class="text-center">
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-warning" (click)="editTool(insertion)">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" (click)="deleteTool(insertion.id)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
         </tr>
         <tr *ngIf="insertions.length === 0">
           <td colspan="7" class="text-center text-muted py-3">No se encontraron inserciones</td>
@@ -42,8 +67,8 @@
   <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
     <div>Total de inserciones: <strong>{{ total }}</strong></div>
 
-    <ngb-pagination [collectionSize]="total" [(page)]="currentPage" 
-                    [pageSize]="pageSize" (pageChange)="onPageChange($event)">
+    <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)">
     </ngb-pagination>
 
     <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
@@ -53,3 +78,90 @@
     </select>
   </div>
 </div>
+
+
+<!-- Modal de creación/edición -->
+<ng-template #toolTypeModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ toolTypeForm.get('id')?.value ? 'Actualizar' : 'Crear' }} Registro</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="toolTypeForm">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Código</label>
+          <input type="text" class="form-control" formControlName="code" />
+          <div class="text-danger small" *ngIf="toolTypeForm.get('code')?.invalid && toolTypeForm.get('code')?.touched">
+            Campo requerido (máx. 3 caracteres)
+          </div>
+        </div>
+        <!-- Tipo de herramienta -->
+        <div class="col-md-4">
+          <label class="form-label">Tipo de herramienta</label>
+          <select class="form-select" formControlName="tool_type_id">  
+            <option [ngValue]="null" disabled>Seleccione una opción</option>
+            <option *ngFor="let t of toolTypes" [ngValue]="t.id">{{ t.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Medición</label>
+          <input type="text" class="form-control" formControlName="measurement" />
+        </div> 
+        <!-- Proveedor -->
+        <div class="col-md-4">
+          <label class="form-label">Proveedor</label>
+          <select class="form-select" formControlName="supplier_id">
+            <option [ngValue]="null" disabled selected>Seleccione un proveedor</option>
+            <option *ngFor="let s of suppliers" [ngValue]="s.id">{{ s.name }}</option>
+          </select>
+        </div> 
+        <div class="col-md-4">
+          <label class="form-label">Modelo</label>
+          <input type="text" class="form-control" formControlName="model" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Estilo</label>
+          <input type="text" class="form-control" formControlName="style" />
+        </div>
+
+        <!-- Tipo -->
+        <div class="col-md-4">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" formControlName="report_type_id">
+                <option [ngValue]="null" disabled>Seleccione una opción</option>
+                <option *ngFor="let t of typeOptions" [ngValue]="t.id">{{ t.report_type_name }}</option>
+            </select>
+        </div>
+  
+        <div class="col-md-4">
+          <label class="form-label">Fecha adquisición</label>
+          <input type="date" class="form-control" formControlName="acquired_at" />
+        </div> 
+        
+        <!-- Ubicación -->
+        <div class="col-md-4">
+          <label class="form-label">Ubicación</label>
+          <select class="form-select" formControlName="location_id">
+            <option [ngValue]="null" disabled>Seleccione una ubicación</option>
+            <option *ngFor="let l of locations" [ngValue]="l.id">{{ l.code }}</option>
+          </select>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Descripción</label>
+          <textarea class="form-control" rows="2" formControlName="description"></textarea>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button class="btn btn-primary" [disabled]="toolTypeForm.invalid" (click)="saveTool(modal)"> 
+      {{ toolTypeForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </div>
+</ng-template>
