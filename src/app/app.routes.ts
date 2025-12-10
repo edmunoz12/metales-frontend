@@ -9,6 +9,7 @@ import { InsertionComponent } from './features/insertion/insertion.component';
 import { LoginComponent } from './auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { AssemblyElectricosComponent } from './features/electricos/assembly-electricos.component';
+import { AssemblyReportComponent } from './features/assembly-report/assembly-report.component';
 
 
 export const routes: Routes = [
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: 'tools-wear-report', component: ToolsWearReportComponent },
       { path: 'insertion', component: InsertionComponent },
       { path: 'assembly', component: AssemblyElectricosComponent },
+      { path: 'assembly-report', component: AssemblyReportComponent },
 
     ],
   },  

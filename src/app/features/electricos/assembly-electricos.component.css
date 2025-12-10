@@ -53,7 +53,7 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 10px solid #ac6e71; /* color de la flecha (gris Bootstrap) */
+  border-top: 10px solid #85bb94; /* color de la flecha (gris Bootstrap) */
 }
 
 /* Quitar flecha del último elemento (último proceso) */
@@ -133,4 +133,25 @@
   border-radius: 4px;
   font-weight: bold;
   font-size: 10px;
+}
+
+.pulse-effect {
+  animation: pulse 1.5s infinite;
+  background: linear-gradient(45deg, #1e4131, #4aad61);
+  color: #fff;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(37, 119, 19, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 10px rgba(0,123,255,0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0,123,255,0);
+  }
 }

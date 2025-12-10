@@ -32,8 +32,15 @@ export class AssemblyElectricosComponent implements OnInit {
 
   priorityOptions = [
     { id: 1, name: 'Prioritario' },
-    { id: 2, name: 'Normal' }
+    { id: 2, name: 'Normal' },
+    { id: 3, name: 'Preferente' },
+
   ];
+
+  //dropbox
+  opetators: any[] = [];
+  customers: any[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +51,24 @@ export class AssemblyElectricosComponent implements OnInit {
   ngOnInit(): void {
     this.assemblies();
     this.initForm();
+
+    // Catalogo de operadores
+    this.assemblyService.getOperators().subscribe(data => {
+      this.opetators = data.map(o => ({
+        id: Number(o.id),
+        name: o.name
+      }));
+    });
+
+    // Catalogo de clientes 
+    this.assemblyService.getCustomers().subscribe(data => {
+      this.customers = data.map(c => ({
+        id: Number(c.id),
+        customer_name: c.customer_name,
+        logo_path: c.logo_path
+      }));
+    });
+
   }
 
   onPageChange(page: number) {
@@ -65,7 +90,11 @@ export class AssemblyElectricosComponent implements OnInit {
 
 
   get topAssemblies() {
-    return this.catalogoAssemblies.slice(0, 8).reverse();
+    return this.catalogoAssemblies.slice(1, 8).reverse();
+  }
+
+  get currentAssembly() {
+    return this.catalogoAssemblies[0] || null;
   }
 
   private initForm(): void {
@@ -75,6 +104,8 @@ export class AssemblyElectricosComponent implements OnInit {
       quantity: ['', Validators.required],
       priority_type: ['', Validators.required],
       assembly_date: [''],
+      user_id: [''],
+      assembly_customer_id: [''],
     });
   }
 
@@ -104,10 +135,14 @@ export class AssemblyElectricosComponent implements OnInit {
       id: Number(assembly.id),
       part_number: String(assembly.part_number),
       quantity: Number(assembly.quantity),
-      priority_type: Number(assembly.priority_type),  // 1 prioridad  o 2 no prioritario restringido
+      priority_type: Number(assembly.priority_type),
+      user_id: Number(assembly.user_id),
+      assembly_customer_id: Number(assembly.assembly_customer_id),
       assembly_date: assembly.assembly_date
         ? assembly.assembly_date.split('T')[0]        // "2025-10-17T00:00:00.000Z" → "2025-10-17"
-        : ''
+        : '',
+      
+
     };
 
     // Pone los valores en el formulario
@@ -151,6 +186,7 @@ export class AssemblyElectricosComponent implements OnInit {
             text: 'Se ha generado el registro exitosamente.'
           }).then(() => {
             modalRef.close();
+            this.assemblies();
             this.catalogoAssemblies.unshift(newAssembly);
             this.total++;
           });

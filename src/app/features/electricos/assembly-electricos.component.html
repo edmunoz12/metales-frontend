@@ -1,20 +1,11 @@
 <div class="container mt-4">
 
-    <h1 class="mb-4">ENSAMBLE ELECTRICOS</h1>
-
-    <!-- <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-        <input type="text" class="form-control w-25" [(ngModel)]="search" (input)="assemblies()"
-            placeholder="Numero de parte..." />
-
-        <button class="btn btn-primary" (click)="newAssembly()">
-            <i class="fa fa-plus me-1"></i> Nuevo registro
-        </button>
-    </div> -->
+    <h1 class="mb-4">AEROSPACE ELECTRICAL TESTING DEPARTMENT</h1>
 
     <div class="row mb-3">
         <div class="col-md-4 col-12 mb-2 mb-md-0">
             <input type="text" class="form-control w-100" [(ngModel)]="search" (input)="assemblies()"
-                placeholder="Numero de parte..." />
+                placeholder="Search by part number..." />
         </div>
         <div class="col-md-8 col-12 d-flex justify-content-end">
             <button class="btn btn-primary" (click)="newAssembly()">
@@ -26,15 +17,15 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #584f4f, #d9d9d9);">En
-                    producción</div>
+                <div class="card-header text-white" style="background: linear-gradient(135deg, #584f4f, #312d2d);">
+                    Testing</div>
                 <div class="card-body">
                     <h5 class="card-title">Lista de ensambles 11/11/2025</h5>
                     <ul class="list-unstyled">
                         <!-- Recorremos los primeros 8 items -->
                         <li *ngFor="let item of topAssemblies; let i = index">
                             <button class="btn btn-custom"
-                                [ngClass]="item.priority_type === 1 ? 'btn-gradient-danger' : 'btn-gradient-light'">
+                                [ngClass]="item.priority_type === 1 ? 'btn-gradient-success' : 'btn-gradient-light'">
                                 {{ topAssemblies.length - i }}.- NumPart: {{ item.part_number }}
                                 <span class="circle-badge">{{ item.quantity }}</span>
                             </button>
@@ -42,96 +33,19 @@
 
                         <!-- Mensaje si no hay registros -->
                         <li *ngIf="catalogoAssemblies.length === 0">
-                            <span class="text-muted">No se encontraron registros</span>
+                            <span class="text-muted">No records found</span>
                         </li>
                     </ul>
                 </div>
-                <div class="card-footer d-flex justify-content-end gap-2"> 
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button *ngIf="currentAssembly" class="btn btn-custom pulse-effect">
+                        NumPart: {{ currentAssembly.part_number }}
+                        <span class="circle-badge">{{ currentAssembly.quantity }}</span>
+                    </button>
+                    <span *ngIf="!currentAssembly" class="text-muted">No items in production</span>
                 </div>
             </div>
         </div>
-
-        <!-- Card 2 -->
-        <!-- <div class="col-md-4">
-            <div class="card">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #af2111, #470b0b);">PRIORITARIO</div> 
-                <div class="card-body">
-                    <h5 class="card-title">Lista de ensambles 11/11/2025</h5>
-                    <ul class="list-unstyled">
-                        <li>
-                            <button class="btn btn-custom btn-gradient-danger">1.- NumPart: 15688
-                                <span class="circle-badge">55</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-light">2.- NumPart: 1235245
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-danger">3.- NumPart: 163548
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-light">4.- NumPart: 12352345
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-danger">5.- NumPart: 123423
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer d-flex justify-content-end gap-2">
-                    <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);">Nuevo</button>
-                    <button class="btn border text-white" style="background: linear-gradient(135deg, #a1a1a1, #616663);">Demos</button>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- Card 3 -->
-        <!-- <div class="col-md-4">
-            <div class="card">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #1e1c1c, #615656);">MONITOREO</div>  
-                <div class="card-body">
-                    <h5 class="card-title">Semana 1</h5>
-                    <ul class="list-unstyled">
-                        <li>
-                            <button class="btn btn-custom btn-gradient-info">1.- NumPart: 15688
-                                <span class="circle-badge">55</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-light">2.- NumPart: 1235245
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-info">3.- NumPart: 163548
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-light">4.- NumPart: 12352345
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-custom btn-gradient-info">5.- NumPart: 123423
-                                <span class="circle-badge">15</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer d-flex justify-content-end gap-2">
-                    <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);">Tutorials</button>
-                    <button class="btn border text-white" style="background: linear-gradient(135deg, #1a1818, #474343);">Demos</button>
-                </div>
-            </div>
-        </div> -->
 
         <!-- TABLA -->
         <div class="col-md-8">
@@ -141,18 +55,42 @@
                         <tr>
                             <th>**</th>
                             <th>NumPart</th>
-                            <th>Cantidad</th>
-                            <th>Tipo</th>
-                            <th class="text-center">Opciones</th>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Type</th>
+                            <th class="text-center">Options</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <!-- Recorremos el array catalogoAssemblies -->
                         <tr *ngFor="let item of catalogoAssemblies; let i = index">
-                            <td>{{ i + 1 }}</td>
-                            <td>{{ item.part_number }}</td>
-                            <td>{{ item.quantity }}</td>
+                            <td> <span class="text-muted" style="font-size: 1rem;">{{ i + 1 }}</span></td>
+                            <td>
+                                <span class="text-muted" style="font-size: 1rem;">
+                                    {{ item.part_number }}
+                                </span>
+                            </td>
+                            <td>
+                                <!-- <div class="d-flex flex-column">
+                                    <span class="fw-semibold">{{ item.customer_name }}</span>
+                                    <span class="text-muted small">{{ item.quantity }}</span>
+                                </div> -->
+                                <div class="d-flex flex-column">
+                                    <span class="text-muted" style="font-size: 1rem;">
+                                        Company: {{ item.customer_name }}
+                                    </span>
+                                    <span class="text-muted small" style="font-size: 0.85rem;">
+                                        Quantity: {{ item.quantity }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <!-- <img *ngIf="item.logo_url" [src]="item.logo_url" alt="Logo" width="100" height="50" /> -->
+                                <div class="d-flex align-items-center">
+                                    <img *ngIf="item.logo_url" [src]="item.logo_url" width="100" height="35"
+                                        class="rounded me-2 border" />
+                                </div>
+                            </td>
                             <td>
                                 <span [ngClass]="{
                                     'priority-danger': item.priority_type === 1,
@@ -228,6 +166,28 @@
                         <option [ngValue]="null" disabled>Seleccione una opción</option>
                         <option *ngFor="let p of priorityOptions" [ngValue]="p.id">
                             {{ p.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Operador -->
+                <div class="col-md-4">
+                    <label class="form-label">Operador</label>
+                    <select class="form-select" formControlName="user_id">
+                        <option [ngValue]="null" disabled>Seleccione una opción</option>
+                        <option *ngFor="let o of opetators" [ngValue]="o.id">
+                            {{ o.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Cliente -->
+                <div class="col-md-4">
+                    <label class="form-label">Cliente</label>
+                    <select class="form-select" formControlName="assembly_customer_id">
+                        <option [ngValue]="null" disabled>Seleccione una opción</option>
+                        <option *ngFor="let c of customers" [ngValue]="c.id">
+                            {{ c.customer_name }}
                         </option>
                     </select>
                 </div>
