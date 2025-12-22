@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 
 export interface ToolWearReport {
@@ -20,7 +21,10 @@ export interface ToolWearReport {
 })
 export class ToolsWearReportService {
 
-  private apiUrl = 'http://localhost/metales/public/api/reports';
+  //private apiUrl = 'http://localhost/metales/public/api/reports';
+  private api = environment.apiUrl; 
+  private apiUrl = `${this.api}/reports`;
+
   constructor(private http: HttpClient) { }
 
   getReports(

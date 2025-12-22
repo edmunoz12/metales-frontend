@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Assembly {
   id?: number;
@@ -17,7 +18,8 @@ export interface Assembly {
 })
 
 export class AssemblyService {
-  private apiUrl = 'http://localhost/metales/public/api/assemblies';
+  //private apiUrl = 'http://localhost/metales/public/api/assemblies';
+  private apiUrl = environment.apiUrl + '/assemblies';
 
   constructor(private http: HttpClient) { }
 

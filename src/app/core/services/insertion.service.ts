@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Insertion {
   id?: number;
@@ -21,9 +22,15 @@ export interface Insertion {
 })
 export class InsertionService {
 
-  private apiUrl = 'http://localhost/metales/public/api/insertion';
+  /*  private apiUrl = 'http://localhost/metales/public/api/insertion';
   private api = 'http://localhost/metales/public/api';
+  */
 
+  // Base URL from environment
+  private api = environment.apiUrl;
+
+  // Resource URL
+  private apiUrl = `${this.api}/insertion`;
   
   constructor(private http: HttpClient) {}
 

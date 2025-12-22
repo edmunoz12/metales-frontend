@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Tool {
   id?: number;
@@ -22,9 +23,16 @@ export interface Tool {
   providedIn: 'root'
 })
 export class ToolService {
-  // URL RESTful base
+  /*
   private apiUrl = 'http://localhost/metales/public/api/tools';
   private api = 'http://localhost/metales/public/api';
+  */
+
+  // Base URL from environment
+    private api = environment.apiUrl; 
+    // Resource URL
+    private apiUrl = `${this.api}/tools`;
+
 
   constructor(private http: HttpClient) {}
 
