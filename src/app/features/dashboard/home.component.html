@@ -1,9 +1,16 @@
 <div class="container py-5">
 
   <!-- Bienvenida -->
-  <div class="text-center mb-5">
-    <h1 class="display-4">Bienvenido a Metales</h1>
-    <p class="lead">Tu plataforma para la gestión de herramientas y materiales industriales.</p>
+  <div class="text-center mb-5" *ngIf="authService.currentUser$ | async as user">
+    <div *ngIf="user?.user_type_id == 2 || user?.user_type_id == 4">
+      <h1 class="display-4">Bienvenido a Metales</h1>
+      <p class="lead">Tu plataforma para la gestión de herramientas y materiales industriales.</p>
+    </div>
+   
+    <div *ngIf="user?.user_type_id == 3 || user?.user_type_id == 5">
+      <h1 class="display-4">Welcome to Aerospace Electrical Testing</h1>
+      <p class="lead">Your platform for managing Aerospace Electrical Testing operations.</p>
+    </div>
     <hr class="my-4">
   </div>
 

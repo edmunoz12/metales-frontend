@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToolService } from '../../core/services/tool.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,7 @@ import { ToolService } from '../../core/services/tool.service';
 })
 export class HomeComponent implements OnInit {
 
+  authService = inject(AuthService);
   totalTools: number = 0;
 
   constructor(private toolService: ToolService) { }
