@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainComponent,
-    canActivate: [authGuard], // protege todas las rutas hijas
+    //canActivate: [authGuard], // protege todas las rutas hijas
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },  // Redirige '' a 'home'
       { path: 'home', component: HomeComponent },

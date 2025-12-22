@@ -32,6 +32,10 @@ export class LoginComponent {
   this.loading = true;
 
   // Paso 1: obtener cookie CSRF (fuera de /api)
+  /**
+   *    //this.http.get(`${this.authService.apiUrl.replace('/api', '')}/sanctum/csrf-cookie`, { withCredentials: true })
+        this.authService.getCsrfToken() 
+   */
   this.http.get(`${this.authService.apiUrl.replace('/api', '')}/sanctum/csrf-cookie`, { withCredentials: true })
     .subscribe({
       next: () => {
@@ -39,7 +43,7 @@ export class LoginComponent {
         this.authService.login(this.email, this.password).subscribe({
           next: () => {
             this.loading = false;
-            this.router.navigate(['/']); // No uses ['/home'], ya que home no tiene una ruta explícita /home.
+            this.router.navigate(['/']);
           },
           error: (err) => {
             this.loading = false;

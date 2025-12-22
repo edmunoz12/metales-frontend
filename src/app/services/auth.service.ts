@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError, throwError, of } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: number;
@@ -14,7 +15,9 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
-  apiUrl = 'http://localhost/metales/public/api';
+  //apiUrl = 'http://localhost/metales/public/api';
+  apiUrl = environment.apiUrl;
+  //private csrfUrl = environment.csrfUrl;
 
   // Estado del usuario actual (reactivo)
   private currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -34,6 +37,7 @@ export class AuthService {
  
   /** Obtener CSRF cookie de Sanctum */
   getCsrfToken(): Observable<any> {
+    //return this.http.get(`${this.csrfUrl}/sanctum/csrf-cookie`, {
     return this.http.get(`${this.apiUrl.replace('/api', '')}/sanctum/csrf-cookie`, {
       withCredentials: true
     });
@@ -44,14 +48,7 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, { email, password }, {
       withCredentials: true  // NECESARIO
     }).pipe(
-      tap(response => {
-        /*if (isPlatformBrowser(this.platformId)) {
-          
-         if (response.user) {
-            localStorage.setItem('user', JSON.stringify(response.user));
-          }
-        }*/
-
+      tap(response => {  
         if (response.user && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('user', JSON.stringify(response.user));
         }
