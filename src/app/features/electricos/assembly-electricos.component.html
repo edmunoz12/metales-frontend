@@ -20,7 +20,7 @@
                 <div class="card-header text-white" style="background: linear-gradient(135deg, #584f4f, #312d2d);">
                     Testing</div>
                 <div class="card-body">
-                    <h5 class="card-title">Lista de ensambles 11/11/2025</h5>
+                    <!-- <h5 class="card-title">Lista de ensambles 11/11/2025</h5> -->
                     <ul class="list-unstyled">
                         <!-- Recorremos los primeros 8 items -->
                         <li *ngFor="let item of topAssemblies; let i = index">
@@ -113,7 +113,7 @@
 
                         <!-- Mensaje si no hay registros -->
                         <tr *ngIf="catalogoAssemblies.length === 0">
-                            <td colspan="5" class="text-center text-muted py-3">
+                            <td colspan="6" class="text-center text-muted py-3">
                                 No se encontraron registros
                             </td>
                         </tr>
