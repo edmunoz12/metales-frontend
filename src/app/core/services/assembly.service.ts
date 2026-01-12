@@ -105,5 +105,8 @@ export class AssemblyService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
+  completedAssembly(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/complete`, {});
+  }
 
 }
