@@ -1,102 +1,92 @@
 <div class="container mt-4">
 
-    <h1 class="mb-4">AEROSPACE ELECTRICAL TESTING DEPARTMENT</h1>
-
-    <div class="row mb-3">
-        <div class="col-md-4 col-12 mb-2 mb-md-0">
-            <input type="text" class="form-control w-100" [(ngModel)]="search" (input)="assemblies()"
-                placeholder="Search by part number..." />
-        </div>
-        <div class="col-md-8 col-12 d-flex justify-content-end">
-            <button class="btn btn-primary" (click)="newAssembly()">
-                <i class="fa fa-plus me-1"></i> Nuevo registro
-            </button>
-        </div>
+    <!-- HEADER -->
+    <div class="queue-header">
+        <h1>AEROSPACE ELECTRICAL TESTING</h1>
+        <span class="subtitle">Production Queue Monitor</span>
     </div>
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #584f4f, #312d2d);">
-                    Testing</div>
-                <div class="card-body">
-                    <!-- <h5 class="card-title">Lista de ensambles 11/11/2025</h5> -->
-                    <ul class="list-unstyled">
-                        <!-- Recorremos los primeros 8 items -->
-                        <li *ngFor="let item of topAssemblies; let i = index">
-                            <button class="btn btn-custom"
-                                [ngClass]="item.priority_type === 1 ? 'btn-gradient-success' : 'btn-gradient-light'">
-                                {{ topAssemblies.length - i }}.- NumPart: {{ item.part_number }}
-                                <span class="circle-badge">{{ item.quantity }}</span>
-                            </button>
-                        </li>
+    <div class="row g-4">
 
-                        <!-- Mensaje si no hay registros -->
-                        <li *ngIf="catalogoAssemblies.length === 0">
-                            <span class="text-muted">No records found</span>
-                        </li>
-                    </ul>
+        <!-- PANEL IZQUIERDO -->
+        <div class="col-md-4">
+
+            <!-- NOW SERVING -->
+            <div class="panel">
+                <div class="panel-title">NOW SERVING</div>
+
+                <div class="now-grid">
+                    <div class="now-card" *ngFor="let item of topAssemblies">
+                        <div class="part">{{ item.part_number }}</div>
+                        <div class="job">Job {{ item.job }}</div>
+                    </div>
+
+                    <div *ngIf="topAssemblies.length === 0" class="empty">
+                        No active assemblies
+                    </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end gap-2">
-                    <button *ngIf="currentAssembly" class="btn btn-custom pulse-effect">
-                        NumPart: {{ currentAssembly.part_number }}
-                        <span class="circle-badge">{{ currentAssembly.quantity }}</span>
-                    </button>
-                    <span *ngIf="!currentAssembly" class="text-muted">No items in production</span>
-                </div>
+            </div>
+
+            <!-- NEXT IN QUEUE -->
+            <div class="panel mt-4">
+                <div class="panel-title">NEXT IN QUEUE</div>
+
+                <ul class="queue-list">
+                    <li *ngFor="let item of nextQueue; let i = index">
+                        <span class="pos">{{ i + 6 }}</span>
+                        <span class="part">{{ item.part_number }}</span>
+                        <span class="job">{{ item.quantity }}</span>
+                    </li>
+
+                    <li *ngIf="nextQueue.length === 0" class="empty">
+                        Queue empty
+                    </li>
+                </ul>
             </div>
         </div>
 
-        <!-- TABLA -->
+        <!-- PANEL DERECHO -->
         <div class="col-md-8">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-light">
+
+            <div class="toolbar">
+                <input type="text" class="form-control" [(ngModel)]="search" (input)="assemblies()"
+                    placeholder="Search part number..." />
+
+                <button class="btn btn-primary" (click)="newAssembly()">
+                    + New Assembly
+                </button>
+            </div>
+
+            <div class="table-panel">
+                <table class="table queue-table">
+                    <thead>
                         <tr>
-                            <th>**</th>
-                            <th>NumPart</th>
-                            <th>Order</th>
+                            <th>#</th>
+                            <th>Part</th>
                             <th>Customer</th>
-                            <th>Type</th>
-                            <th class="text-center">Options</th>
+                            <th>Job</th>
+                            <th>Qty</th>
+                            <th>Priority</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr *ngFor="let item of catalogoAssemblies; let i = index">
-                            <td> <span class="text-muted" style="font-size: 1rem;">{{ i + 1 }}</span></td>
+                            <td>{{ i + 1 }}</td>
+                            <td class="fw-bold">{{ item.part_number }}</td>
                             <td>
-                                <span class="text-muted" style="font-size: 1rem;">
-                                    {{ item.part_number }}
-                                </span>
-                            </td>
-                            <td>
-                                <!-- <div class="d-flex flex-column">
-                                    <span class="fw-semibold">{{ item.customer_name }}</span>
-                                    <span class="text-muted small">{{ item.quantity }}</span>
-                                </div> -->
-                                <div class="d-flex flex-column">
-                                    <span class="text-muted" style="font-size: 1rem;">
-                                        Company: {{ item.customer_name }}
-                                    </span>
-                                    <span class="text-muted small" style="font-size: 0.85rem;">
-                                        Quantity: {{ item.quantity }}
-                                    </span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img *ngIf="item.logo_url || item.logo_path" [src]="item.logo_url || item.logo_path"
+                                        width="90" height="35" class="rounded border bg-white p-1" />
                                 </div>
                             </td>
+                            <td>{{ item.job }}</td>
+                            <td>{{ item.quantity }}</td>
                             <td>
-                                <!-- <img *ngIf="item.logo_url" [src]="item.logo_url" alt="Logo" width="100" height="50" /> -->
-                                <div class="d-flex align-items-center">
-                                    <img *ngIf="item.logo_url" [src]="item.logo_url" width="100" height="35"
-                                        class="rounded me-2 border" />
-                                </div>
-                            </td>
-                            <td>
-                                <span [ngClass]="{
-                                    'priority-danger': item.priority_type === 1,
-                                    'priority-light': item.priority_type === 2
-                                    }">
-                                    {{ item.priority_type === 1 ? 'Prioritario' : 'Normal' }}
+                                <span class="badge" [class.badge-priority]="item.priority_type !== 3"
+                                    [class.badge-normal]="item.priority_type === 3">
+                                    {{ item.priority_type !== 3 ? 'Priority' : 'Normal' }}
                                 </span>
                             </td>
                             <td class="text-center">
@@ -107,104 +97,141 @@
                                     <button class="btn btn-danger" (click)="deleteItem(item.id)">
                                         <i class="fa fa-trash"></i>
                                     </button>
+                                    <button class="btn btn-success" (click)="updateStatus(item.id)">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
 
-                        <!-- Mensaje si no hay registros -->
                         <tr *ngIf="catalogoAssemblies.length === 0">
-                            <td colspan="6" class="text-center text-muted py-3">
-                                No se encontraron registros
+                            <td colspan="7" class="text-center text-muted">
+                                No records found
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!--Paginación -->
-            <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
-                <div>Total de ensambles: <strong>{{ total }}</strong></div>
+            <div class="pagination-bar">
+                <span>Total: {{ total }}</span>
 
                 <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
                     (pageChange)="assemblies()">
                 </ngb-pagination>
 
-                <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="assemblies()">
-                    <option [ngValue]="5">5 por página</option>
-                    <option [ngValue]="10">10 por página</option>
-                    <option [ngValue]="20">20 por página</option>
+                <select class="form-select w-auto" [(ngModel)]="pageSize" (change)="assemblies()">
+                    <option [ngValue]="5">5</option>
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="20">20</option>
                 </select>
             </div>
+
         </div>
     </div>
 </div>
 
 <!-- Modal de creación/edición -->
 <ng-template #assemblyModal let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title">{{ assemblyForm.get('id')?.value ? 'Editar' : 'Generar nuevo' }} ensamble</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    <div class="modal-header modal-header-light">
+        <div>
+            <h5 class="modal-title">
+                {{ assemblyForm.get('id')?.value ? 'Editar ensamble' : 'Nuevo ensamble' }}
+            </h5>
+            <small class="text-muted">
+                Complete la información del ensamble
+            </small>
+        </div>
+
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+        </button>
     </div>
 
     <div class="modal-body">
         <form [formGroup]="assemblyForm">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">NumPart:</label>
-                    <input type="text" class="form-control" formControlName="part_number" />
-                </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Cantidad</label>
-                    <input type="number" class="form-control" formControlName="quantity" />
-                </div>
+            <!-- BLOQUE PRINCIPAL -->
+            <div class="form-section">
+                <h6 class="section-title">Información principal</h6>
 
-                <!-- Tipo -->
-                <div class="col-md-4">
-                    <label class="form-label">Prioridad</label>
-                    <select class="form-select" formControlName="priority_type">
-                        <option [ngValue]="null" disabled>Seleccione una opción</option>
-                        <option *ngFor="let p of priorityOptions" [ngValue]="p.id">
-                            {{ p.name }}
-                        </option>
-                    </select>
-                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">NumPart</label>
+                        <input type="text" class="form-control" formControlName="part_number"
+                            placeholder="Ej. PN-12345" />
+                    </div>
 
-                <!-- Operador -->
-                <div class="col-md-4">
-                    <label class="form-label">Operador</label>
-                    <select class="form-select" formControlName="user_id">
-                        <option [ngValue]="null" disabled>Seleccione una opción</option>
-                        <option *ngFor="let o of opetators" [ngValue]="o.id">
-                            {{ o.name }}
-                        </option>
-                    </select>
-                </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" formControlName="quantity" />
+                    </div>
 
-                <!-- Cliente -->
-                <div class="col-md-4">
-                    <label class="form-label">Cliente</label>
-                    <select class="form-select" formControlName="assembly_customer_id">
-                        <option [ngValue]="null" disabled>Seleccione una opción</option>
-                        <option *ngFor="let c of customers" [ngValue]="c.id">
-                            {{ c.customer_name }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Fecha</label>
-                    <input type="date" class="form-control" formControlName="assembly_date" />
+                    <div class="col-md-4">
+                        <label class="form-label">Prioridad</label>
+                        <select class="form-select" formControlName="priority_type">
+                            <option [ngValue]="null" disabled>Seleccione</option>
+                            <option *ngFor="let p of priorityOptions" [ngValue]="p.id">
+                                {{ p.name }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
+
+            <!-- BLOQUE OPERACIÓN -->
+            <div class="form-section">
+                <h6 class="section-title">Operación</h6>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Operador</label>
+                        <select class="form-select" formControlName="user_id">
+                            <option [ngValue]="null" disabled>Seleccione</option>
+                            <option *ngFor="let o of opetators" [ngValue]="o.id">
+                                {{ o.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Job</label>
+                        <input type="text" class="form-control" formControlName="job" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Cliente</label>
+                        <select class="form-select" formControlName="assembly_customer_id">
+                            <option [ngValue]="null" disabled>Seleccione</option>
+                            <option *ngFor="let c of customers" [ngValue]="c.id">
+                                {{ c.customer_name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE FECHA -->
+            <div class="form-section">
+                <h6 class="section-title">Fecha</h6>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de ensamble</label>
+                        <input type="date" class="form-control" formControlName="assembly_date" />
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>
 
-    <div class="modal-footer">
-        <button class="btn border text-white" style="background: linear-gradient(135deg, #216832, #218838);"
-            (click)="saveAssembly(modal)">{{ assemblyForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}</button>
+    <div class="modal-footer modal-footer-light">
+        <button class="btn btn-primary" (click)="saveAssembly(modal)">
+            {{ assemblyForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
+        </button>
 
-        <button class="btn border text-white" style="background: linear-gradient(135deg, #a1a1a1, #616663);"
-            (click)="modal.dismiss()">Cancelar</button>
+        <button class="btn btn-outline-secondary" (click)="modal.dismiss()">
+            Cancelar
+        </button>
     </div>
 </ng-template>

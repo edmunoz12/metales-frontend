@@ -31,9 +31,9 @@ export class AssemblyElectricosComponent implements OnInit {
   assemblyForm!: FormGroup;
 
   priorityOptions = [
-    { id: 1, name: 'Prioritario' },
-    { id: 2, name: 'Normal' },
-    { id: 3, name: 'Preferente' },
+    { id: 1, name: 'Preferente' },
+    { id: 2, name: 'Prioritario' },
+    { id: 3, name: 'Normal' },
 
   ];
 
@@ -90,7 +90,11 @@ export class AssemblyElectricosComponent implements OnInit {
 
 
   get topAssemblies() {
-    return this.catalogoAssemblies.slice(1, 8).reverse();
+    return this.catalogoAssemblies.slice(0, 5);
+  }
+
+  get nextQueue() {
+    return this.catalogoAssemblies.slice(5);          
   }
 
   get currentAssembly() {
@@ -105,6 +109,7 @@ export class AssemblyElectricosComponent implements OnInit {
       priority_type: ['', Validators.required],
       assembly_date: [''],
       user_id: [''],
+      job:[''],
       assembly_customer_id: [''],
     });
   }
@@ -137,6 +142,7 @@ export class AssemblyElectricosComponent implements OnInit {
       quantity: Number(assembly.quantity),
       priority_type: Number(assembly.priority_type),
       user_id: Number(assembly.user_id),
+      job: String(assembly.job),
       assembly_customer_id: Number(assembly.assembly_customer_id),
       assembly_date: assembly.assembly_date
         ? assembly.assembly_date.split('T')[0]        // "2025-10-17T00:00:00.000Z" → "2025-10-17"
@@ -147,7 +153,12 @@ export class AssemblyElectricosComponent implements OnInit {
 
     // Pone los valores en el formulario
     this.assemblyForm.patchValue(formattedAssembly);
-    this.modalService.open(this.assemblyModal, { backdrop: 'static', centered: true });
+    this.modalService.open(this.assemblyModal, { 
+      backdrop: 'static', 
+      centered: true,
+      size: 'lg',
+      windowClass: 'queue-modal'
+     });
   }
 
 
@@ -164,7 +175,7 @@ export class AssemblyElectricosComponent implements OnInit {
         next: () => {
           Swal.fire({
             icon: 'success',
-            title: 'Actualización exitosa',
+            title: 'El Job '+ formData.job + ' ha sido actualizado con éxito',
             text: 'El registro fue actualizado correctamente.'
           }).then(() => {
             modalRef.close();
@@ -224,5 +235,32 @@ export class AssemblyElectricosComponent implements OnInit {
       }
     });
   }
+
+  // update Status 
+  updateStatus(assemblyId: number): void {
+    Swal.fire({
+      title: '¿Marcar como terminado?',
+      text: '¿Quieres cambiar el estado de este producto?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.assemblyService.completedAssembly(assemblyId).subscribe({
+          next: () => {
+            this.catalogoAssemblies = this.catalogoAssemblies.filter(a => a.id !== assemblyId);
+            this.total--;
+            Swal.fire('Terminado', 'El registro fue finalizado con éxito.', 'success');
+          },
+          error: (error) => {
+            console.error(error);
+            Swal.fire('Error', 'No se pudo finalizar el registro.', 'error');
+          }
+        });
+      }
+    });
+  }
+
 
 }
