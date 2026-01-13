@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AssemblyService } from '../../core/services/assembly.service';
 import Swal from 'sweetalert2';
+import { AuthService, User } from '../../services/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-assembly-electricos',
@@ -41,12 +43,20 @@ export class AssemblyElectricosComponent implements OnInit {
   opetators: any[] = [];
   customers: any[] = [];
 
+  user$: Observable<User | null>;
+
+  allowedForNewAssembly = [1, 3, 5]; //" New Assembly"
+  allowedForTable = [1, 3, 5, 6]; // tabla
+  onlyUserForActions = [1,3]; // "actions" 
 
   constructor(
+    private authService: AuthService,         
     private fb: FormBuilder,
     private assemblyService: AssemblyService,
     private modalService: NgbModal
-  ) { }
+  ) { 
+    this.user$ = this.authService.currentUser$; 
+  }
 
   ngOnInit(): void {
     this.assemblies();

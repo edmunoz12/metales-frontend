@@ -1,237 +1,251 @@
-<div class="container mt-4">
+<ng-container *ngIf="user$ | async as user">
+    <div *ngIf="allowedForTable.includes(user.user_type_id)">
+        <div class="container mt-4">
 
-    <!-- HEADER -->
-    <div class="queue-header">
-        <h1>AEROSPACE ELECTRICAL TESTING</h1>
-        <span class="subtitle">Production Queue Monitor</span>
-    </div>
-
-    <div class="row g-4">
-
-        <!-- PANEL IZQUIERDO -->
-        <div class="col-md-4">
-
-            <!-- NOW SERVING -->
-            <div class="panel">
-                <div class="panel-title">NOW SERVING</div>
-
-                <div class="now-grid">
-                    <div class="now-card" *ngFor="let item of topAssemblies">
-                        <div class="part">{{ item.part_number }}</div>
-                        <div class="job">Job {{ item.job }}</div>
-                    </div>
-
-                    <div *ngIf="topAssemblies.length === 0" class="empty">
-                        No active assemblies
-                    </div>
-                </div>
+            <!-- HEADER -->
+            <div class="queue-header">
+                <h1>AEROSPACE ELECTRICAL TESTING</h1>
+                <span class="subtitle">Production Queue Monitor</span>
             </div>
 
-            <!-- NEXT IN QUEUE -->
-            <div class="panel mt-4">
-                <div class="panel-title">NEXT IN QUEUE</div>
+            <div class="row g-4">
 
-                <ul class="queue-list">
-                    <li *ngFor="let item of nextQueue; let i = index">
-                        <span class="pos">{{ i + 6 }}</span>
-                        <span class="part">{{ item.part_number }}</span>
-                        <span class="job">{{ item.quantity }}</span>
-                    </li>
+                <!-- PANEL IZQUIERDO -->
+                <div class="col-md-4">
 
-                    <li *ngIf="nextQueue.length === 0" class="empty">
-                        Queue empty
-                    </li>
-                </ul>
+                    <!-- NOW SERVING -->
+                    <div class="panel">
+                        <div class="panel-title">NOW SERVING</div>
+
+                        <div class="now-grid">
+                            <div class="now-card" *ngFor="let item of topAssemblies">
+                                <div class="part">{{ item.part_number }}</div>
+                                <div class="job">Job {{ item.job }}</div>
+                            </div>
+
+                            <div *ngIf="topAssemblies.length === 0" class="empty">
+                                No active assemblies
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEXT IN QUEUE -->
+                    <div class="panel mt-4">
+                        <div class="panel-title">NEXT IN QUEUE</div>
+
+                        <ul class="queue-list">
+                            <li *ngFor="let item of nextQueue; let i = index">
+                                <span class="pos">{{ i + 6 }}</span>
+                                <span class="part">{{ item.part_number }}</span>
+                                <span class="job">{{ item.quantity }}</span>
+                            </li>
+
+                            <li *ngIf="nextQueue.length === 0" class="empty">
+                                Queue empty
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- PANEL DERECHO -->
+                <div class="col-md-8">
+
+                    <div class="toolbar">
+                        <input type="text" class="form-control" [(ngModel)]="search" (input)="assemblies()"
+                            placeholder="Search part number..." />
+
+                        <ng-container *ngIf="user$ | async as user">
+                            <button class="btn btn-primary" (click)="newAssembly()"
+                                *ngIf="allowedForNewAssembly.includes(user.user_type_id)">
+                                + New Assembly
+                            </button>
+                        </ng-container>
+
+                    </div>
+                    <ng-container *ngIf="user$ | async as user">
+                        <div *ngIf="allowedForTable.includes(user.user_type_id)">
+                            <div class="table-panel">
+                                <table class="table queue-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Part</th>
+                                            <th>Customer</th>
+                                            <th>Job</th>
+                                            <th>Qty</th>
+                                            <th>Priority</th>
+                                            <th class="text-center" *ngIf="onlyUserForActions.includes(user.user_type_id)">Actions</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let item of catalogoAssemblies; let i = index">
+                                            <td>{{ i + 1 }}</td>
+                                            <td class="fw-bold">{{ item.part_number }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img *ngIf="item.logo_url || item.logo_path"
+                                                        [src]="item.logo_url || item.logo_path" width="90" height="35"
+                                                        class="rounded border bg-white p-1" />
+                                                </div>
+                                            </td>
+                                            <td>{{ item.job }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>
+                                                <span class="badge" [class.badge-priority]="item.priority_type !== 3"
+                                                    [class.badge-normal]="item.priority_type === 3">
+                                                    {{ item.priority_type !== 3 ? 'Priority' : 'Normal' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center" *ngIf="onlyUserForActions.includes(user.user_type_id)">
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-warning" (click)="editAssembly(item)">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger" (click)="deleteItem(item.id)">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-success" (click)="updateStatus(item.id)">
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="catalogoAssemblies.length === 0">
+                                            <td colspan="7" class="text-center text-muted">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ng-container>
+
+
+                    <div class="pagination-bar">
+                        <span>Total: {{ total }}</span>
+
+                        <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
+                            (pageChange)="assemblies()">
+                        </ngb-pagination>
+
+                        <select class="form-select w-auto" [(ngModel)]="pageSize" (change)="assemblies()">
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="20">20</option>
+                        </select>
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <!-- PANEL DERECHO -->
-        <div class="col-md-8">
+        <!-- Modal de creación/edición -->
+        <ng-template #assemblyModal let-modal>
+            <div class="modal-header modal-header-light">
+                <div>
+                    <h5 class="modal-title">
+                        {{ assemblyForm.get('id')?.value ? 'Editar ensamble' : 'Nuevo ensamble' }}
+                    </h5>
+                    <small class="text-muted">
+                        Complete la información del ensamble
+                    </small>
+                </div>
 
-            <div class="toolbar">
-                <input type="text" class="form-control" [(ngModel)]="search" (input)="assemblies()"
-                    placeholder="Search part number..." />
-
-                <button class="btn btn-primary" (click)="newAssembly()">
-                    + New Assembly
+                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
                 </button>
             </div>
 
-            <div class="table-panel">
-                <table class="table queue-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Part</th>
-                            <th>Customer</th>
-                            <th>Job</th>
-                            <th>Qty</th>
-                            <th>Priority</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
+            <div class="modal-body">
+                <form [formGroup]="assemblyForm">
 
-                    <tbody>
-                        <tr *ngFor="let item of catalogoAssemblies; let i = index">
-                            <td>{{ i + 1 }}</td>
-                            <td class="fw-bold">{{ item.part_number }}</td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img *ngIf="item.logo_url || item.logo_path" [src]="item.logo_url || item.logo_path"
-                                        width="90" height="35" class="rounded border bg-white p-1" />
-                                </div>
-                            </td>
-                            <td>{{ item.job }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>
-                                <span class="badge" [class.badge-priority]="item.priority_type !== 3"
-                                    [class.badge-normal]="item.priority_type === 3">
-                                    {{ item.priority_type !== 3 ? 'Priority' : 'Normal' }}
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-warning" (click)="editAssembly(item)">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-danger" (click)="deleteItem(item.id)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                    <button class="btn btn-success" (click)="updateStatus(item.id)">
-                                        <i class="fa-solid fa-check"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                    <!-- BLOQUE PRINCIPAL -->
+                    <div class="form-section">
+                        <h6 class="section-title">Información principal</h6>
 
-                        <tr *ngIf="catalogoAssemblies.length === 0">
-                            <td colspan="7" class="text-center text-muted">
-                                No records found
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">NumPart</label>
+                                <input type="text" class="form-control" formControlName="part_number"
+                                    placeholder="Ej. PN-12345" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" formControlName="quantity" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Prioridad</label>
+                                <select class="form-select" formControlName="priority_type">
+                                    <option [ngValue]="null" disabled>Seleccione</option>
+                                    <option *ngFor="let p of priorityOptions" [ngValue]="p.id">
+                                        {{ p.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE OPERACIÓN -->
+                    <div class="form-section">
+                        <h6 class="section-title">Operación</h6>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Operador</label>
+                                <select class="form-select" formControlName="user_id">
+                                    <option [ngValue]="null" disabled>Seleccione</option>
+                                    <option *ngFor="let o of opetators" [ngValue]="o.id">
+                                        {{ o.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Job</label>
+                                <input type="text" class="form-control" formControlName="job" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Cliente</label>
+                                <select class="form-select" formControlName="assembly_customer_id">
+                                    <option [ngValue]="null" disabled>Seleccione</option>
+                                    <option *ngFor="let c of customers" [ngValue]="c.id">
+                                        {{ c.customer_name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE FECHA -->
+                    <div class="form-section">
+                        <h6 class="section-title">Fecha</h6>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha de ensamble</label>
+                                <input type="date" class="form-control" formControlName="assembly_date" />
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
             </div>
 
-            <div class="pagination-bar">
-                <span>Total: {{ total }}</span>
+            <div class="modal-footer modal-footer-light">
+                <button class="btn btn-primary" (click)="saveAssembly(modal)">
+                    {{ assemblyForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
+                </button>
 
-                <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
-                    (pageChange)="assemblies()">
-                </ngb-pagination>
-
-                <select class="form-select w-auto" [(ngModel)]="pageSize" (change)="assemblies()">
-                    <option [ngValue]="5">5</option>
-                    <option [ngValue]="10">10</option>
-                    <option [ngValue]="20">20</option>
-                </select>
+                <button class="btn btn-outline-secondary" (click)="modal.dismiss()">
+                    Cancelar
+                </button>
             </div>
+        </ng-template>
 
-        </div>
     </div>
-</div>
-
-<!-- Modal de creación/edición -->
-<ng-template #assemblyModal let-modal>
-    <div class="modal-header modal-header-light">
-        <div>
-            <h5 class="modal-title">
-                {{ assemblyForm.get('id')?.value ? 'Editar ensamble' : 'Nuevo ensamble' }}
-            </h5>
-            <small class="text-muted">
-                Complete la información del ensamble
-            </small>
-        </div>
-
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
-        </button>
-    </div>
-
-    <div class="modal-body">
-        <form [formGroup]="assemblyForm">
-
-            <!-- BLOQUE PRINCIPAL -->
-            <div class="form-section">
-                <h6 class="section-title">Información principal</h6>
-
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label">NumPart</label>
-                        <input type="text" class="form-control" formControlName="part_number"
-                            placeholder="Ej. PN-12345" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Cantidad</label>
-                        <input type="number" class="form-control" formControlName="quantity" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Prioridad</label>
-                        <select class="form-select" formControlName="priority_type">
-                            <option [ngValue]="null" disabled>Seleccione</option>
-                            <option *ngFor="let p of priorityOptions" [ngValue]="p.id">
-                                {{ p.name }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BLOQUE OPERACIÓN -->
-            <div class="form-section">
-                <h6 class="section-title">Operación</h6>
-
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Operador</label>
-                        <select class="form-select" formControlName="user_id">
-                            <option [ngValue]="null" disabled>Seleccione</option>
-                            <option *ngFor="let o of opetators" [ngValue]="o.id">
-                                {{ o.name }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Job</label>
-                        <input type="text" class="form-control" formControlName="job" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Cliente</label>
-                        <select class="form-select" formControlName="assembly_customer_id">
-                            <option [ngValue]="null" disabled>Seleccione</option>
-                            <option *ngFor="let c of customers" [ngValue]="c.id">
-                                {{ c.customer_name }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BLOQUE FECHA -->
-            <div class="form-section">
-                <h6 class="section-title">Fecha</h6>
-
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Fecha de ensamble</label>
-                        <input type="date" class="form-control" formControlName="assembly_date" />
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-
-    <div class="modal-footer modal-footer-light">
-        <button class="btn btn-primary" (click)="saveAssembly(modal)">
-            {{ assemblyForm.get('id')?.value ? 'Actualizar' : 'Guardar' }}
-        </button>
-
-        <button class="btn btn-outline-secondary" (click)="modal.dismiss()">
-            Cancelar
-        </button>
-    </div>
-</ng-template>
+</ng-container>

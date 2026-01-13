@@ -3,8 +3,7 @@
 
     <ul class="list-group">
         <li class="list-group-item" *ngFor="let menu of combinedMenuItems">
-            <!-- Menu principal -->  
-            <!-- class="list-group" *ngIf="menu.Submenu && menu.Submenu.length > 0" [ngClass]="{'collapse': collapsedState[menu.id]}" > -->
+            <!-- Menu principal -->   
             <button class="btn-menu" (click)="toggleCollapse(menu.id)">
                 <a class="menu-link" [routerLink]="menu.id === 1 ? '/HomeComponent' : menu.menu">
                     {{ menu.Menu }} &nbsp; &nbsp; <i class="{{menu.icono}}"></i>
