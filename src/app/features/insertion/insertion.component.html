@@ -145,7 +145,7 @@
           <label class="form-label">Ubicación</label>
           <select class="form-select" formControlName="location_id">
             <option [ngValue]="null" disabled>Seleccione una ubicación</option>
-            <option *ngFor="let l of locations" [ngValue]="l.id">{{ l.code }}</option>
+            <option *ngFor="let l of locations" [ngValue]="l.id">{{ l.name }}</option>
           </select>
         </div>
 
