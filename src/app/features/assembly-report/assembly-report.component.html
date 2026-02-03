@@ -33,9 +33,11 @@
                             <th>**</th>
                             <th>NumPart</th>
                             <th>Cantidad</th>
-                            <th>Fecha</th>
+                            <th>Fecha entrada</th>
                             <th>Tipo</th> 
+                            <th>Job</th>
                             <th class="text-center">Estado</th>
+                            <th>Fecha salida</th>
                         </tr>
                     </thead>
 
@@ -45,7 +47,9 @@
                             <td>{{ i + 1 }}</td>
                             <td>{{ item.part_number }}</td>
                             <td>{{ item.quantity }}</td>
-                            <td>{{ item.assembly_date | date:'yyyy-MM-dd' }}</td>
+                            <td>
+                                {{ item.created_at | date:'yyyy-MM-dd : HH:mm' }}
+                            </td> <!-- <td>{{ item.assembly_date | date:'yyyy-MM-dd' }}</td>-->
                             <td>
                                 <span [ngClass]="{
                                     'priority-danger': item.priority_type === 1,
@@ -54,14 +58,18 @@
                                     {{ item.priority_type === 1 ? 'Prioritario' : 'Normal' }}
                                 </span>
                             </td>
+                            <td> {{ item.job }}</td>
                             <td class="text-center">
-                                Terminado
+                                {{ item.status === 1 ? 'Terminado' : 'Cancelado' }} 
+                            </td>
+                            <td>
+                                {{ item.updated_at | date:'yyyy-MM-dd : HH:mm' }}
                             </td>
                         </tr>
 
                         <!-- Mensaje si no hay registros -->
                         <tr *ngIf="catalogoAssemblies.length === 0">
-                            <td colspan="6" class="text-center text-muted py-3">
+                            <td colspan="8" class="text-center text-muted py-3">
                                 No se encontraron registros
                             </td>
                         </tr>

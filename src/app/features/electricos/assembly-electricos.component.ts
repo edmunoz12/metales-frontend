@@ -1,11 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AssemblyService } from '../../core/services/assembly.service';
 import Swal from 'sweetalert2';
 import { AuthService, User } from '../../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, interval, Subscription } from 'rxjs';
+//import { EchoService } from '../../core/services/echo.service';
 
 @Component({
   selector: 'app-assembly-electricos',
@@ -19,7 +20,7 @@ import { Observable } from 'rxjs';
   templateUrl: './assembly-electricos.component.html',
   styleUrl: './assembly-electricos.component.css'
 })
-export class AssemblyElectricosComponent implements OnInit {
+export class AssemblyElectricosComponent implements OnInit, OnDestroy {
   @ViewChild('assemblyModal') assemblyModal: any;
 
   catalogoAssemblies: any[] = [];
@@ -47,17 +48,22 @@ export class AssemblyElectricosComponent implements OnInit {
 
   allowedForNewAssembly = [1, 3, 5]; //" New Assembly"
   allowedForTable = [1, 3, 5, 6]; // tabla
-  onlyUserForActions = [1,3]; // "actions" 
+  onlyUserForActions = [1, 3]; // "actions" 
+
+  private autoRefreshSub!: Subscription;
+  private readonly REFRESH_TIME = 5000; // 5s
 
   constructor(
-    private authService: AuthService,         
+    private authService: AuthService,
     private fb: FormBuilder,
     private assemblyService: AssemblyService,
-    private modalService: NgbModal
-  ) { 
-    this.user$ = this.authService.currentUser$; 
+    private modalService: NgbModal,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.user$ = this.authService.currentUser$;
   }
 
+  /*
   ngOnInit(): void {
     this.assemblies();
     this.initForm();
@@ -80,6 +86,52 @@ export class AssemblyElectricosComponent implements OnInit {
     });
 
   }
+*/
+
+  ngOnInit(): void {
+    //const echo = this.echoService.echo;
+
+    //console.log('Echo disponible:', echo);
+    this.assemblies();
+    this.initForm();
+
+    // Catálogo operadores
+    this.assemblyService.getOperators().subscribe(data => {
+      this.opetators = data.map(o => ({
+        id: Number(o.id),
+        name: o.name
+      }));
+    });
+
+    // Catálogo clientes
+    this.assemblyService.getCustomers().subscribe(data => {
+      this.customers = data.map(c => ({
+        id: Number(c.id),
+        customer_name: c.customer_name,
+        logo_path: c.logo_path
+      }));
+    });
+
+    // 🔁 Auto refresh SOLO en navegador
+    if (isPlatformBrowser(this.platformId)) {
+      this.autoRefreshSub = interval(this.REFRESH_TIME).subscribe(() => {
+        this.assemblies();
+      });
+    }
+
+    /** EVENTOS TIEMPO REAL */
+ 
+
+  }
+
+  // Sal del canal al destruir el componente
+  ngOnDestroy(): void {
+    if (this.autoRefreshSub) {
+      this.autoRefreshSub.unsubscribe();
+    }
+  
+  }
+
 
   onPageChange(page: number) {
     this.currentPage = page;
@@ -104,7 +156,7 @@ export class AssemblyElectricosComponent implements OnInit {
   }
 
   get nextQueue() {
-    return this.catalogoAssemblies.slice(5);          
+    return this.catalogoAssemblies.slice(5);
   }
 
   get currentAssembly() {
@@ -119,7 +171,7 @@ export class AssemblyElectricosComponent implements OnInit {
       priority_type: ['', Validators.required],
       assembly_date: [''],
       user_id: [''],
-      job:[''],
+      job: [''],
       assembly_customer_id: [''],
     });
   }
@@ -157,18 +209,18 @@ export class AssemblyElectricosComponent implements OnInit {
       assembly_date: assembly.assembly_date
         ? assembly.assembly_date.split('T')[0]        // "2025-10-17T00:00:00.000Z" → "2025-10-17"
         : '',
-      
+
 
     };
 
     // Pone los valores en el formulario
     this.assemblyForm.patchValue(formattedAssembly);
-    this.modalService.open(this.assemblyModal, { 
-      backdrop: 'static', 
+    this.modalService.open(this.assemblyModal, {
+      backdrop: 'static',
       centered: true,
       size: 'lg',
       windowClass: 'queue-modal'
-     });
+    });
   }
 
 
@@ -185,11 +237,10 @@ export class AssemblyElectricosComponent implements OnInit {
         next: () => {
           Swal.fire({
             icon: 'success',
-            title: 'El Job '+ formData.job + ' ha sido actualizado con éxito',
+            title: 'El Job ' + formData.job + ' ha sido actualizado con éxito',
             text: 'El registro fue actualizado correctamente.'
           }).then(() => {
             modalRef.close();
-            this.assemblies(); // recarga lista
           });
         },
         error: (error) => {
@@ -207,9 +258,6 @@ export class AssemblyElectricosComponent implements OnInit {
             text: 'Se ha generado el registro exitosamente.'
           }).then(() => {
             modalRef.close();
-            this.assemblies();
-            this.catalogoAssemblies.unshift(newAssembly);
-            this.total++;
           });
         },
         error: (error) => {

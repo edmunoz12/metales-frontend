@@ -24,7 +24,7 @@ export class AssemblyReportComponent implements OnInit {
   catalogoAssemblies: any[] = [];
   total: number = 0;
   currentPage = 1;
-  pageSize: number = 20;
+  pageSize: number = 10;
   search = '';
   sortColumn = 'name';
   sortDirection = 'asc';
@@ -61,10 +61,11 @@ export class AssemblyReportComponent implements OnInit {
     this.assemblies();
   }
 
+  /*
   get topAssemblies() {
     return this.catalogoAssemblies.slice(0, 8).reverse();
   }
-
+  */
 
   assemblies(): void {
     this.assemblyService.getAssembliesReports(this.search, this.currentPage, this.pageSize, this.sortColumn, this.sortDirection)

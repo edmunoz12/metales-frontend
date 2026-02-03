@@ -25,6 +25,8 @@
     "@ng-bootstrap/ng-bootstrap": "^17.0.1",
     "bootstrap": "5.3",
     "express": "^4.18.2",
+    "laravel-echo": "^2.3.0",
+    "pusher-js": "^8.4.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.2",
     "tslib": "^2.3.0",
