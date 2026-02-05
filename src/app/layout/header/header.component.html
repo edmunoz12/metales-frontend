@@ -14,7 +14,7 @@
 
             <!-- Menú de navegación -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto" *ngIf="user?.user_type_id === 2">
+                <ul class="navbar-nav ms-auto" *ngIf="user?.user_type_id === 2 || user?.user_type_id === 1">
                     <li class="nav-item">
                         <a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
                     </li>

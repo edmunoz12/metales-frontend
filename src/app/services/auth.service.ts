@@ -72,22 +72,7 @@ export class AuthService {
       catchError(err => throwError(() => err))
     );
   }
-
-  /** Obtener usuario autenticado */
-  getUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/user`, {
-      withCredentials: true  // ⚠️ NECESARIO
-    }).pipe(
-      tap(user => {
-        this.currentUserSubject.next(user);
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('user', JSON.stringify(user));
-        }
-      }),
-      catchError(err => throwError(() => err))
-    );
-  }
-
+ 
   /** Obtener usuario autenticado desde backend */
   fetchUser(): Observable<User | null> {
     return this.http.get<User>(`${this.apiUrl}/user`, { withCredentials: true }).pipe(

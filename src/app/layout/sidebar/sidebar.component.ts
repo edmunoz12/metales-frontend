@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../../core/services/menu.service';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { Router, RouterModule } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
+import { AuthService, User } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,7 +22,14 @@ export class SidebarComponent implements OnInit {
   combinedMenuItems: any[] = [];
   collapsedState: { [key: number]: boolean } = {};
 
-  constructor(private menuService: MenuService) {}
+  user$: Observable<User | null>;
+
+  constructor(
+    private menuService: MenuService,
+    private authService: AuthService,
+  ) {
+    this.user$ = this.authService.currentUser$;
+  }
 
   ngOnInit(): void {
     // Espera a que se carguen ambos menús y submenús
@@ -52,6 +60,7 @@ export class SidebarComponent implements OnInit {
         return {
           id: menu.id,
           Menu: menu.menu,
+          instance: menu.instance,
           icono: menu.icono,
           Submenu: relatedSubmenus
         };

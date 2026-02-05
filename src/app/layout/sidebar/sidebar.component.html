@@ -1,25 +1,30 @@
 <div class="sidebar" [class.hidden]="!isSidebarVisible">
-    <button class="btn-toggle" (click)="toggleSidebar()">☰</button>  
-
+    <button class="btn-toggle" (click)="toggleSidebar()">☰</button>
+    
     <ul class="list-group">
         <li class="list-group-item" *ngFor="let menu of combinedMenuItems">
-            <!-- Menu principal -->   
-            <button class="btn-menu" (click)="toggleCollapse(menu.id)">
-                <a class="menu-link" [routerLink]="menu.id === 1 ? '/HomeComponent' : menu.menu">
-                    {{ menu.Menu }} &nbsp; &nbsp; <i class="{{menu.icono}}"></i>
-                </a> 
-            </button>
-
-            <!-- Submenú -->
-            <ul class="list-group" [ngClass]="{'collapse': collapsedState[menu.id]}">
-                <li class="list-group-item" *ngFor="let sub of menu.Submenu">
-                    <button class="btn-submenu"> 
-                        <a class="submenu-link" [routerLink]="sub.Link">{{ sub.Nombre }} <i class="{{sub.icono}}"></i> </a>                   
+            <ng-container *ngIf="user$ | async as user">
+                <div *ngIf="user.user_type_id == 1 || menu.instance == user.user_type_id">
+                    <!-- menú -->
+                    <button class="btn-menu" (click)="toggleCollapse(menu.id)">
+                        <a class="menu-link" [routerLink]="menu.id === 1 ? '/HomeComponent' : menu.menu">
+                            {{ menu.Menu }} &nbsp; &nbsp;<i class="{{menu.icono}}"></i>
+                        </a>
                     </button>
-                </li>
-            </ul>
+
+                    <!-- Submenú -->
+                    <ul class="list-group" [ngClass]="{'collapse': collapsedState[menu.id]}">
+                        <li class="list-group-item" *ngFor="let sub of menu.Submenu">
+                            <button class="btn-submenu">
+                                <a class="submenu-link" [routerLink]="sub.Link">{{ sub.Nombre }} <i
+                                        class="{{sub.icono}}"></i>
+                                </a>
+                            </button>
+                        </li>
+                    </ul>
+                </div> 
+            </ng-container> 
         </li>
-    </ul> 
-    
-</div>
+    </ul>
  
+</div>
