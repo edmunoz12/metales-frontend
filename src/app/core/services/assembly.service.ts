@@ -11,6 +11,8 @@ export interface Assembly {
   assembly_date: string;
   assembly_customer_id: number;
   user_id: number;
+  job: string;
+  retention: number;
 }
 
 @Injectable({

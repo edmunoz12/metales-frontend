@@ -72,6 +72,7 @@
                                             <th>Part</th>
                                             <th>Customer</th>
                                             <th>Job</th>
+                                            <th>retention</th>
                                             <th>Qty</th>
                                             <th>Priority</th>
                                             <th class="text-center" *ngIf="onlyUserForActions.includes(user.user_type_id)">Actions</th>
@@ -90,6 +91,7 @@
                                                 </div>
                                             </td>
                                             <td>{{ item.job }}</td>
+                                            <td>{{ item.retention == 1 ? 'Aplica' : 'N/A' }}</td>
                                             <td>{{ item.quantity }}</td>
                                             <td>
                                                 <span class="badge" [class.badge-priority]="item.priority_type !== 3"
@@ -163,7 +165,7 @@
 
                     <!-- BLOQUE PRINCIPAL -->
                     <div class="form-section">
-                        <h6 class="section-title">Información principal</h6>
+                        <h6 class="section-title">Identificadores</h6>
 
                         <div class="row g-3">
                             <div class="col-md-4">
@@ -173,8 +175,8 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label">Cantidad</label>
-                                <input type="number" class="form-control" formControlName="quantity" />
+                                <label class="form-label">Job</label>
+                                <input type="text" class="form-control" formControlName="job" />
                             </div>
 
                             <div class="col-md-4">
@@ -205,8 +207,8 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label">Job</label>
-                                <input type="text" class="form-control" formControlName="job" />
+                                <label class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" formControlName="quantity" />
                             </div>
 
                             <div class="col-md-4">
@@ -230,7 +232,17 @@
                                 <label class="form-label">Fecha de ensamble</label>
                                 <input type="date" class="form-control" formControlName="assembly_date" />
                             </div>
-                        </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label">retención</label>
+                                <select class="form-select" formControlName="retention">
+                                    <option [ngValue]="null" disabled>Seleccione</option>
+                                    <option [ngValue]="0">N/A</option>
+                                    <option [ngValue]="1">Aplica</option>
+                                </select>
+                            </div> 
+
+                        </div> 
                     </div>
 
                 </form>

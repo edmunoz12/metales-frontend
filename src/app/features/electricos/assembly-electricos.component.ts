@@ -173,6 +173,7 @@ export class AssemblyElectricosComponent implements OnInit, OnDestroy {
       user_id: [''],
       job: [''],
       assembly_customer_id: [''],
+      retention: [null],
     });
   }
 
@@ -209,7 +210,7 @@ export class AssemblyElectricosComponent implements OnInit, OnDestroy {
       assembly_date: assembly.assembly_date
         ? assembly.assembly_date.split('T')[0]        // "2025-10-17T00:00:00.000Z" → "2025-10-17"
         : '',
-
+      retention: Number(assembly.retention),
 
     };
 
