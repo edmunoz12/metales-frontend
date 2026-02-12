@@ -68,10 +68,7 @@ export class ToolComponent implements OnInit {
         name: s.name
       }));
     });
-
-    this.toolService.getToolTypes().subscribe(data => this.toolTypes = data);
-    this.toolService.getLocations().subscribe(data => this.locations = data);
-    this.toolService.getSuppliers().subscribe(data => this.suppliers = data);
+ 
   }
 
   onPageChange(page: number) {
@@ -102,7 +99,8 @@ export class ToolComponent implements OnInit {
   private initForm(): void {
     this.toolForm = this.fb.group({
       id: [null],
-      code: ['', [Validators.required, Validators.maxLength(3)]],
+      //code: ['', [Validators.required, Validators.maxLength(3)]],
+      code: [''],
       shape: ['', Validators.required],
       station_size: ['', Validators.required],
       measurement: ['', Validators.required],
@@ -121,7 +119,7 @@ export class ToolComponent implements OnInit {
   loadTools(): void {
     this.toolService.getTools(this.search, this.currentPage, this.pageSize, this.sortColumn, this.sortDirection)
       .subscribe({
-        next: (response) => { 
+        next: (response) => {
           this.catalogoTools = response.data || response; // depende cómo responda tu backend
           this.total = response.total || this.catalogoTools.length;
         },
@@ -136,7 +134,37 @@ export class ToolComponent implements OnInit {
   newTool(): void {
     this.toolForm.reset();
     this.toolForm.patchValue({ id: null });
-    this.modalService.open(this.toolModal, { backdrop: 'static', centered: true });
+
+    /*
+    |--------------------------------------------------------------------------
+    | 1. PEDIR SIGUIENTE CODE DISPONIBLE
+    |--------------------------------------------------------------------------
+    */
+
+    this.toolService.getNextCode().subscribe({
+      next: (response) => {
+
+        const code = response.data.code;
+
+        this.toolForm.patchValue({ code });
+
+        this.modalService.open(this.toolModal, {
+          backdrop: 'static',
+          centered: true
+        });
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        Swal.fire(
+          'Sin códigos disponibles',
+          'No hay códigos disponibles para asignar.',
+          'warning'
+        );
+      }
+    });
   }
 
   // tool.component.ts
@@ -151,7 +179,7 @@ export class ToolComponent implements OnInit {
       lifecycle_statuses: Number(tool.lifecycle_statuses),
       angle: Number(tool.angle),
       clarity: String(tool.clarity),
-      tool_type_id: tool.tool_type_id ? Number(tool.tool_type_id) : null, 
+      tool_type_id: tool.tool_type_id ? Number(tool.tool_type_id) : null,
       location_id: tool.location_id ? Number(tool.location_id) : null,
       supplier_id: tool.supplier_id ? Number(tool.supplier_id) : null,
       acquired_at: tool.acquired_at
@@ -163,13 +191,8 @@ export class ToolComponent implements OnInit {
     this.modalService.open(this.toolModal, { backdrop: 'static' });
   }
 
-  // Guarda nueva herramienta
-  saveTool(modalRef: any): void {
-    if (this.toolForm.invalid) {
-      this.toolForm.markAllAsTouched();
-      return;
-    }
 
+  saveTool(modalRef: any): void {
     const formData = this.toolForm.value;
 
     if (formData.id) {
@@ -191,28 +214,38 @@ export class ToolComponent implements OnInit {
         }
       });
     } else {
+      // code no disponible
+      /* */
+
       // Modo creación
       this.toolService.createTool(formData).subscribe({
         next: (newTool) => {
+
           Swal.fire({
             icon: 'success',
             title: 'Registro creado',
-            text: 'La herramienta fue registrada exitosamente.'
+            html: `<strong>Código asignado:</strong> ${newTool.code}`,
           }).then(() => {
+
             modalRef.close();
-            this.catalogoTools.unshift(newTool);
-            this.total++;
+
+            this.loadTools(); // ← MEJOR que unshift manual
           });
         },
-        error: (error) => {
-          console.error(error);
-          Swal.fire('Error', 'No se pudo guardar el registro.', 'error');
+
+        error: (error) => { 
+          console.error(error); 
+          Swal.fire(
+            'Error',
+            error.error?.message ?? 'No se pudo guardar el registro.',
+            'error'
+          );
         }
       });
     }
 
-
   }
+
 
   // Elimina una herramienta
   deleteTool(toolId: number): void {

@@ -82,12 +82,10 @@
   <div class="modal-body">
     <form [formGroup]="toolForm">
       <div class="row g-3">
+        <!--   -->
         <div class="col-md-4">
           <label class="form-label">Código</label>
-          <input type="text" class="form-control" formControlName="code" />
-          <div class="text-danger small" *ngIf="toolForm.get('code')?.invalid && toolForm.get('code')?.touched">
-            Campo requerido (máx. 3 caracteres)
-          </div>
+          <input type="text" class="form-control" formControlName="code" readonly/>
         </div>
 
         <div class="col-md-4">

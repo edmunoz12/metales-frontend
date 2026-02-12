@@ -19,15 +19,20 @@ export interface Tool {
   description?: string;
 }
 
+export interface ToolCodePreview {
+  id: number;
+  code: string;
+}
+
+export interface ApiResponse<T> {
+  status: string;
+  data: T;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ToolService {
-  /*
-  private apiUrl = 'http://localhost/metales/public/api/tools';
-  private api = 'http://localhost/metales/public/api';
-  */
-
   // Base URL from environment
     private api = environment.apiUrl; 
     // Resource URL
@@ -65,6 +70,13 @@ export class ToolService {
   }
   getSuppliers(): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`${this.api}/suppliers`);
+  }
+
+  // code previsualizado
+  getNextCode(): Observable<ApiResponse<ToolCodePreview>> {
+    return this.http.get<ApiResponse<ToolCodePreview>>(
+      `${this.api}/tool-codes/preview`
+    );
   }
 
   /* Count Tools */
