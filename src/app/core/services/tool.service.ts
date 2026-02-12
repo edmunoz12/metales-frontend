@@ -65,8 +65,8 @@ export class ToolService {
   getToolTypes(): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`${this.api}/toolTypes`);
   }
-  getLocations(): Observable<{ id: number; code: string }[]> {
-    return this.http.get<{ id: number; code: string }[]>(`${this.api}/locations`);
+  getLocations(): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(`${this.api}/locations`);
   }
   getSuppliers(): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`${this.api}/suppliers`);

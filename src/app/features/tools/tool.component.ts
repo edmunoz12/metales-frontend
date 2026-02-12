@@ -56,8 +56,8 @@ export class ToolComponent implements OnInit {
     // Cargar ubicaciones
     this.toolService.getLocations().subscribe(data => {
       this.locations = data.map(l => ({
-        id: Number(l.id),
-        code: l.code
+        id: Number(l.id), 
+        name: l.name
       }));
     });
 
