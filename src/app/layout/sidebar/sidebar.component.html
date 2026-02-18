@@ -4,7 +4,7 @@
     <ul class="list-group">
         <li class="list-group-item" *ngFor="let menu of combinedMenuItems">
             <ng-container *ngIf="user$ | async as user">
-                <div *ngIf="user.user_type_id == 1 || menu.instance == user.user_type_id">
+                <div *ngIf="user.user_type_id == 1 ||  menu.instance == user.user_type.instance">
                     <!-- menú -->
                     <button class="btn-menu" (click)="toggleCollapse(menu.id)">
                         <a class="menu-link" [routerLink]="menu.id === 1 ? '/HomeComponent' : menu.menu">

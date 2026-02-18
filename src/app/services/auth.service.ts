@@ -9,6 +9,15 @@ export interface User {
   name: string;
   email: string;
   user_type_id: number;
+  user_type: UserType;  
+}
+
+export interface UserType {
+  id: number;
+  name: string;
+  description?: string;
+  instance: number;
+  module?: string;
 }
 
 @Injectable({
