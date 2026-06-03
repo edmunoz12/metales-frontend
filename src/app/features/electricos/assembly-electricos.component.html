@@ -59,6 +59,10 @@
                                 *ngIf="allowedForNewAssembly.includes(user.user_type_id)">
                                 + New Assembly
                             </button>
+
+                            <button class="btn btn-danger" (click)="deleteAllItems()">
+                                - Delete All
+                            </button>
                         </ng-container>
 
                     </div>
@@ -225,16 +229,17 @@
 
                     <!-- BLOQUE FECHA -->
                     <div class="form-section">
-                        <h6 class="section-title">Fecha</h6>
+                        <h6 class="section-title">General</h6>
 
                         <div class="row g-3">
+                            <!--
                             <div class="col-md-4">
                                 <label class="form-label">Fecha de ensamble</label>
                                 <input type="date" class="form-control" formControlName="assembly_date" />
                             </div>
-                            
+                            -->
                             <div class="col-md-4">
-                                <label class="form-label">retención</label>
+                                <label class="form-label">Retención</label>
                                 <select class="form-select" formControlName="retention">
                                     <option [ngValue]="null" disabled>Seleccione</option>
                                     <option [ngValue]="0">N/A</option>

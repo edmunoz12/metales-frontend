@@ -168,8 +168,7 @@ export class AssemblyElectricosComponent implements OnInit, OnDestroy {
       id: [null],
       part_number: ['', Validators.required],
       quantity: ['', Validators.required],
-      priority_type: ['', Validators.required],
-      assembly_date: [''],
+      priority_type: ['', Validators.required], 
       user_id: [''],
       job: [''],
       assembly_customer_id: [''],
@@ -207,9 +206,6 @@ export class AssemblyElectricosComponent implements OnInit, OnDestroy {
       user_id: Number(assembly.user_id),
       job: String(assembly.job),
       assembly_customer_id: Number(assembly.assembly_customer_id),
-      assembly_date: assembly.assembly_date
-        ? assembly.assembly_date.split('T')[0]        // "2025-10-17T00:00:00.000Z" → "2025-10-17"
-        : '',
       retention: Number(assembly.retention),
 
     };
@@ -320,6 +316,47 @@ export class AssemblyElectricosComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  //Elimina todos los registros status = null, no aprobados
+  deleteAllItems(): void { 
+  Swal.fire({
+    title: '¿Eliminar todos los registros?',
+    text: 'Solo se eliminarán los ensambles no aprobados de hoy.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar todo',
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+
+    if (result.isConfirmed) {
+
+      this.assemblyService.deleteAllItems().subscribe({
+        next: (res: any) => {
+
+          Swal.fire(
+            'Eliminado',
+            res.message,
+            'success'
+          );
+
+          this.assemblies(); // refrescar tabla
+
+        },
+        error: (err) => {
+          console.error(err);
+
+          Swal.fire(
+            'Error',
+            'No se pudieron eliminar los registros.',
+            'error'
+          );
+        }
+      });
+
+    }
+
+  });
+}
 
 
 }

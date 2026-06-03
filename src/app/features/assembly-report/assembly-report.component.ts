@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { AssemblyService } from '../../core/services/assembly.service';
 
@@ -18,7 +18,7 @@ import { AssemblyService } from '../../core/services/assembly.service';
   styleUrl: './assembly-report.component.css'
 })
 export class AssemblyReportComponent implements OnInit {
-  @ViewChild('assemblyReportModal') assemblyModal: any;
+  @ViewChild('assemblyDetailModal') assemblyDetailModal: any;
 
 
   catalogoAssemblies: any[] = [];
@@ -30,6 +30,8 @@ export class AssemblyReportComponent implements OnInit {
   sortDirection = 'asc';
   dateFilter = '';
 
+  selectedAssembly: any = null;
+
   priorityOptions = [
     { id: 1, name: 'Prioritario' },
     { id: 2, name: 'Normal' },
@@ -37,7 +39,8 @@ export class AssemblyReportComponent implements OnInit {
   ];
 
   constructor(
-    private assemblyService: AssemblyService
+    private assemblyService: AssemblyService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -88,5 +91,40 @@ export class AssemblyReportComponent implements OnInit {
   exportExcel() {
     alert('Función de exportar Excel (pendiente de implementar)');
   }
+
+  viewAssembly(item: any): void {
+
+    if (this.selectedAssembly?.id === item.id) {
+      this.selectedAssembly = null;
+      return;
+    }
+
+    this.assemblyService.getAssembly(item.id)
+      .subscribe({
+        next: (response: any) => {
+          this.selectedAssembly = response.data;
+
+          this.modalService.open(
+          this.assemblyDetailModal,
+            {
+              size: 'lg',
+              centered: true,
+              backdrop: 'static'
+            }
+          );
+
+        },
+        error: (err) => {
+          console.error(err);
+
+            Swal.fire(
+              'Error',
+              'No se pudo cargar el detalle del ensamble.',
+              'error'
+            );
+        }
+      });
+  }
+ 
 
 }

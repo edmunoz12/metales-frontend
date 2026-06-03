@@ -1,5 +1,5 @@
 <div class="container mt-4">
-    <h1 class="mb-4">REPORTE ENSAMBLES ELÉCTRICOS</h1> 
+    <h1 class="mb-4">REPORTE ENSAMBLES ELÉCTRICOS</h1>
     <!-- FILTROS -->
     <div class="row mb-3 g-2">
         <div class="col-md-3 col-12">
@@ -10,8 +10,9 @@
 
         <div class="col-md-4 col-12">
             <label class="form-label">Número de Parte</label>
-            <input type="text" class="form-control" placeholder="Buscar por parte..." [(ngModel)]="search" (ngModelChange)="onSearch($event)">
-        </div> 
+            <input type="text" class="form-control" placeholder="Buscar por parte..." [(ngModel)]="search"
+                (ngModelChange)="onSearch($event)">
+        </div>
 
         <div class="col-md-2 col-12 d-flex align-items-end">
             <button class="btn btn-success w-100" (click)="exportExcel()">
@@ -23,7 +24,7 @@
     <!-- TABLA DEL REPORTE -->
     <div class="row">
         <!-- <div class="col-md-4"></div> -->
-     
+
         <!-- TABLA -->
         <div class="col-md-12">
             <div class="table-responsive">
@@ -34,10 +35,11 @@
                             <th>NumPart</th>
                             <th>Cantidad</th>
                             <th>Fecha entrada</th>
-                            <th>Tipo</th> 
+                            <th>Tipo</th>
                             <th>Job</th>
                             <th class="text-center">Estado</th>
                             <th>Fecha salida</th>
+                            <th class="text-center">ver</th>
                         </tr>
                     </thead>
 
@@ -60,10 +62,15 @@
                             </td>
                             <td> {{ item.job }}</td>
                             <td class="text-center">
-                                {{ item.status === 1 ? 'Terminado' : 'Cancelado' }} 
+                                {{ item.status === 1 ? 'Terminado' : 'Cancelado' }}
                             </td>
                             <td>
                                 {{ item.updated_at | date:'yyyy-MM-dd : HH:mm' }}
+                            </td>
+                            <td>
+                                <button class="btn btn-success btn-sm" (click)="viewAssembly(item)">
+                                    <i class="fa fa-eye"></i>
+                                </button>
                             </td>
                         </tr>
 
@@ -81,8 +88,8 @@
             <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
                 <div>Total de ensambles: <strong>{{ total }}</strong></div>
 
-                <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize"
-                    (pageChange)="assemblies()">
+                <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [pageSize]="pageSize" [maxSize]="10"
+                    [ellipses]="true" [boundaryLinks]="true" (pageChange)="assemblies()">
                 </ngb-pagination>
 
                 <select class="form-select w-auto" [(ngModel)]="pageSize" (ngModelChange)="assemblies()">
@@ -93,6 +100,56 @@
             </div>
         </div>
     </div>
+
+    <ng-template #assemblyDetailModal let-modal>
+
+        <div class="modal-header">
+            <h5 class="modal-title">Detalle del Ensamble</h5>
+
+            <button type="button" class="btn-close" (click)="modal.dismiss()">
+            </button>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Número de Parte</label>
+                    <input type="text" class="form-control" [value]="selectedAssembly.part_number" readonly>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Cantidad</label>
+                    <input type="text" class="form-control" [value]="selectedAssembly.quantity" readonly>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Job</label>
+                    <input type="text" class="form-control" [value]="selectedAssembly.job" readonly>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Operador</label>
+                    <input type="text" class="form-control" [value]="selectedAssembly.operator_name" readonly>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Creado por</label>
+                    <input type="text" class="form-control" [value]="selectedAssembly.created_by_name" readonly>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="modal.close()">
+                Cerrar
+            </button>
+        </div>
+
+    </ng-template>
 
 
 </div>

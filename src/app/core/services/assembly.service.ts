@@ -13,6 +13,16 @@ export interface Assembly {
   user_id: number;
   job: string;
   retention: number;
+
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string | null;
+  status?: number;
+}
+
+export interface AssemblyResponse {
+  status: string;
+  data: Assembly;
 }
 
 @Injectable({
@@ -78,10 +88,10 @@ export class AssemblyService {
 
 
   /**
-   * 1.- lista paginada PRODUCCION Obtener un ensamble por ID
-   */
-  getAssembly(id: number): Observable<Assembly> {
-    return this.http.get<Assembly>(`${this.apiUrl}/${id}`);
+   * 1.- Obtener un ensamble por ID
+   */  
+  getAssembly(id: number): Observable<AssemblyResponse> {
+    return this.http.get<AssemblyResponse>(`${this.apiUrl}/${id}`);
   }
 
   /**
@@ -109,6 +119,13 @@ export class AssemblyService {
 
   completedAssembly(id: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/complete`, {});
+  }
+
+  /**
+   * Elimina todos los ensambles no procesados
+   */
+  deleteAllItems() {
+    return this.http.delete(`${this.apiUrl}/assemblies/delete-all-items`);
   }
 
 }
