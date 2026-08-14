@@ -46,7 +46,7 @@ export class AssemblyElectricosComponent implements OnInit, OnDestroy {
 
   user$: Observable<User | null>;
 
-  allowedForNewAssembly = [1, 3, 5]; //" New Assembly"
+  allowedForNewAssembly = [1, 3, 5,6]; //" New Assembly"
   allowedForTable = [1, 3, 5, 6]; // tabla
   onlyUserForActions = [1, 3]; // "actions" 
 

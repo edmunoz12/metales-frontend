@@ -60,7 +60,8 @@
                                 + New Assembly
                             </button>
 
-                            <button class="btn btn-danger" (click)="deleteAllItems()">
+                            <button class="btn btn-danger" (click)="deleteAllItems()" 
+                                *ngIf="onlyUserForActions.includes(user.user_type_id)">
                                 - Delete All
                             </button>
                         </ng-container>

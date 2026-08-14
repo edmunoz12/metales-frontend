@@ -84,13 +84,7 @@ export class AssemblyReportComponent implements OnInit {
   }
 
   /** Funciones */
-  exportPDF() {
-    alert('Función de exportar PDF (pendiente de implementar)');
-  }
-
-  exportExcel() {
-    alert('Función de exportar Excel (pendiente de implementar)');
-  }
+     
 
   viewAssembly(item: any): void {
 
